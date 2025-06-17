@@ -1,2 +1,1 @@
-"# tanuki_fe_pdf" 
-"heello"
+# Trail Project - Frontend (Next.js with HeroUI)
