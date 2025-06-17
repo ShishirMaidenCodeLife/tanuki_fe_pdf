@@ -113,6 +113,7 @@ export const PageContainer: React.FC<T.ContainerType> = ({
   children,
   className: newClassName,
   extendCss,
+  isMaxWidth,
 }) => {
   return (
     <div
@@ -120,7 +121,8 @@ export const PageContainer: React.FC<T.ContainerType> = ({
         newClassName ||
           clsx([
             "container-page-section",
-            "relative flex _apply_container_width mx-auto",
+            "relative flex mx-auto",
+            isMaxWidth ? "" : "_apply_container_width",
             // "section-page flex flex-col items-center justify-center gap-4 py-8 md:py-10 bg-red-300",
             extendCss,
           ]),
@@ -143,7 +145,7 @@ export const DashboardContainer = () => {
         )}
       >
         <C.BannerSection />
-        <C.CategoriesSection {...getByCatResponse?.data} />
+        <C.CategoriesSection categories={getByCatResponse} />
         <C.MoreTemplatesSection />
         <C.YourRoutesSection />
       </C.PageContainer>

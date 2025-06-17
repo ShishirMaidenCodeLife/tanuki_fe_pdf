@@ -150,9 +150,7 @@ export const useQueryRoadmapHook = (): UseQueryRoadmapHookType => {
   // Handle roadmap data with proper null checks and type safety
   // const chartData = createMapD3Hierarchy(roadmapData);
 
-  // Use sample data if in development mode
-  if (process.env.stub_mode === "stub") return testSampleCombinedRoadmapJson;
-
+  // Use sample data if in development mod
   const apiResult = {
     // First Api - Variables
     rolesQuery,

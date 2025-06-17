@@ -18,6 +18,7 @@
   --width-scrollbar: 5px;
   --width-scrollbar-thick: 8px;
   --width-uiw-md-editor: 420px;
+  --width-uiw-md-editor-text: 360px; /* Text content width accounting for gutters, numbers, lists */
   --height-scrollbar-thin: 3px;
   --height-scrollbar: 5px;
   --height-scrollbar-thick: 8px;

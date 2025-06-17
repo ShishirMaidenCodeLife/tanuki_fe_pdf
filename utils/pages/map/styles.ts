@@ -3,14 +3,14 @@ import * as d3 from "d3";
 
 // Import: utils/pages/map
 import * as c from "@/utils/pages/map/constants";
-import { DefaultType, RoadmapCustomNodeType, RoadmapTitleType } from "@/types";
+import { DefaultType, RoadmapCHNodeType, RoadmapTitleType } from "@/types";
 
 // Define the random color function for link styling
 export const getColorByIndex = (index: number) =>
   d3.schemeCategory10[index % d3.schemeCategory10.length];
 
 // Adjust the text color
-export const adjustColorClass = (d: RoadmapCustomNodeType, show?: boolean) => {
+export const adjustColorClass = (d: RoadmapCHNodeType, show?: boolean) => {
   // Destructure
   const { isFirstParent, isHighlighted, parentColor } = d;
 
@@ -24,7 +24,7 @@ export const adjustColorClass = (d: RoadmapCustomNodeType, show?: boolean) => {
 };
 
 // Get the font size based on the node
-export const getNodeFontSize = (d: RoadmapCustomNodeType) => {
+export const getNodeFontSize = (d: RoadmapCHNodeType) => {
   // If data is undefined, return transparent opacity
   if (!d) return c.FONT_SIZE_DEFAULT;
 
@@ -62,7 +62,7 @@ export const getTextOrSkeletonVisibility = (
 
 // Adjust opacity based on data properties
 export const adjustOpacity = (
-  d?: RoadmapCustomNodeType | "default" | "transparent",
+  d?: RoadmapCHNodeType | "default" | "transparent",
   showTextSkeleton?: boolean,
 ) => {
   // If data is undefined, return transparent opacity
@@ -79,7 +79,7 @@ export const adjustOpacity = (
 // Adjust opacity based on the node
 export const adjustOpacityHover = (
   show: boolean,
-  d: RoadmapCustomNodeType,
+  d: RoadmapCHNodeType,
   showTextSkeleton?: boolean,
 ) => {
   const isHighlighted = d?.isHighlighted;
@@ -97,16 +97,13 @@ export const adjustVisibility = (isHighlighted?: boolean) => {
   else return c.VISIBILITY_HIDDEN;
 };
 
-export const adjustNodeCircle = (d: RoadmapCustomNodeType) => {
+export const adjustNodeCircle = (d: RoadmapCHNodeType) => {
   return (
     (d?.isLastDepth ? c.CIRCLE_MULTIPLIER : 1) * c.NODE_RADIUS_SMALL_CIRCLE
   );
 };
 
-export const adjustNodeCircleHover = (
-  show: boolean,
-  d: RoadmapCustomNodeType,
-) => {
+export const adjustNodeCircleHover = (show: boolean, d: RoadmapCHNodeType) => {
   return adjustNodeCircle(d) * (show ? (d?.isLastDepth ? 1.1 : 1.5) : 1);
 };
 

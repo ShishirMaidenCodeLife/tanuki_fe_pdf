@@ -6,7 +6,8 @@ export const RETRY = 1;
 export const STALE_TIME = 5 * 60 * 1000;
 
 export const QUERY_KEYS = {
-  getByCategory: (auth?: AmplifyStateType) => createQueryKey("category", auth),
+  getByCategory: (auth?: AmplifyStateType) =>
+    createQueryKey("categories", auth),
 
   getByUuid: (auth?: AmplifyStateType) => createQueryKey("uuid", auth),
 

@@ -1,10 +1,6 @@
 import * as d3 from "d3";
 
-import {
-  D3SelectionDefsType,
-  RFCustomEdgeType,
-  RFCustomNodeType,
-} from "@/types";
+import { D3SelectionDefsType, RFCHParentEdgeType, RFCHNodeType } from "@/types";
 import { toSnakeCase } from "@/utils/methods/string";
 import { getConnectedNodes } from "@/utils/pages/route-templates/view/data";
 import { checkForGroups } from "@/utils/pages/route-templates/view/utils";
@@ -155,12 +151,12 @@ export const createSvgDefs = (svgSelector: SVGSVGElement) => {
 };
 
 export const getUniqueEdgeColors = (
-  nodes: RFCustomNodeType[],
-  edges: RFCustomEdgeType[],
+  nodes: RFCHNodeType[],
+  edges: RFCHParentEdgeType[],
 ): Set<string> =>
   new Set(
     edges
-      .map((d: RFCustomEdgeType) => {
+      .map((d: RFCHParentEdgeType) => {
         // Find the source and target nodes
         const { sourceNode, targetNode } = getConnectedNodes(nodes, d.data);
 

@@ -6,17 +6,14 @@ import {
   CommonToastContainer,
 } from "@/components";
 import { getAiSingleCallBody } from "@/config/api";
-import {
-  checkForValidRoutes,
-  handleFormBuilderTestSubmit,
-} from "@/utils/methods/app";
+import { checkForValidRoutes } from "@/utils/methods/app";
 import * as H from "@/hooks";
 import { TOAST_MESSAGES } from "@/utils/constants/messages";
 import { handleCustomToast, handleErrorToast } from "@/utils/methods/style";
 import * as cleanups from "@/utils/pages/map/cleanups";
 import * as events from "@/utils/pages/map/events";
 import { toStartCase } from "@/utils/methods/string";
-import { RoadmapCustomNodeType } from "@/types";
+import { RoadmapCHNodeType } from "@/types";
 
 // Clear Skills Button
 export const ClearSkillsButton = () => {
@@ -68,9 +65,7 @@ export const ClearSkillsButton = () => {
 // Generate Route Button
 export const GenerateRouteButton = () => {
   // Destructure
-  const { checkedNodes, setMd, isMdLoading, setIsMdLoading } =
-    H.useRoadmapStoreHook();
-  const { navigateWithLoader } = H.useNavigationLoaderHook();
+  const { checkedNodes, isMdLoading, setIsMdLoading } = H.useRoadmapStoreHook();
 
   // States
   // const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +79,7 @@ export const GenerateRouteButton = () => {
   // Handlers
   const handleGenerateRoute = () => {
     const formData = checkedNodes
-      ?.map(({ data }: RoadmapCustomNodeType) => data?.name)
+      ?.map(({ data }: RoadmapCHNodeType) => data?.name)
       .join(",");
 
     const errorText = checkForValidRoutes(formData);
@@ -96,13 +91,6 @@ export const GenerateRouteButton = () => {
     }
 
     setIsMdLoading(true);
-    if (process.env.stub_mode === "stub") {
-      handleFormBuilderTestSubmit({ setMd, setIsMdLoading });
-
-      navigateWithLoader("route-templates", true);
-
-      return;
-    }
 
     singleAiCallMutation.mutate(getAiSingleCallBody(formData));
   };

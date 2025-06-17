@@ -23,9 +23,9 @@ export const prependMdHeaderIfAbsent = (
 
 // Find the node by Id from the nodes array
 export const findNodeById = (
-  nodes: T.RFCustomNodeType[],
+  nodes: T.RFCHNodeType[],
   id: string,
-): T.RFCustomNodeType | undefined => {
+): T.RFCHNodeType | undefined => {
   if (!id) {
     console.warn("No ID provided to findNodeById.");
 
@@ -43,7 +43,7 @@ export const findNodeById = (
 
 // Find the source and target nodes from the edge data
 export const getConnectedNodes = (
-  nodes: T.RFCustomNodeType[],
+  nodes: T.RFCHNodeType[],
   edgeData?: T.RFEdgeDataType,
 ) => {
   // Return early with undefined if no nodes are provided
@@ -185,9 +185,9 @@ export const getSwapFailureMessage = (
 // Convert markdown to a structured object
 // export const convertMdToObj = (md: string = "", setNodes?: any) => {
 //   // Initialize nodes and edges
-//   const nodes: T.RFCustomNodeType[] = [];
-//   const edges: T.RFCustomEdgeType[] = [];
-//   const allGrandparentNodes: T.RFCustomNodeType[] = [];
+//   const nodes: T.RFCHNodeType[] = [];
+//   const edges: T.RFCHParentEdgeType[] = [];
+//   const allGrandparentNodes: T.RFCHNodeType[] = [];
 
 //   // Default output structure
 //   const defaultMdOutput = {
@@ -344,7 +344,7 @@ export const getSwapFailureMessage = (
 
 // Convert nodes to markdown format
 export const convertNodesToMd = (
-  nodes: T.RFCustomNodeType[] = [],
+  nodes: T.RFCHNodeType[] = [],
   currentHeading: string,
 ): string => {
   if (!nodes.length) return ""; // Return an empty string if no nodes are provided

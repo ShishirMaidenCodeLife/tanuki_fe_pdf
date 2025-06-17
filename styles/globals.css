@@ -144,6 +144,23 @@
   height: 5px;
 }
 
+/* Disable React Flow node dragging when items are being reordered */
+.react-flow[data-item-reordering="true"] .react-flow__node {
+  pointer-events: none !important;
+}
+
+.react-flow[data-item-reordering="true"]
+  .react-flow__node
+  [data-reorder-item="true"] {
+  pointer-events: all !important;
+}
+
+.react-flow[data-item-reordering="true"]
+  .react-flow__node
+  [data-reorder-group="true"] {
+  pointer-events: all !important;
+}
+
 /* 
   Custom Example CSS  - This CSS is to improve the example experience.
   You can remove it if you want to use the default styles.

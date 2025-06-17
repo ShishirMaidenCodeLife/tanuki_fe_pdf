@@ -16,23 +16,23 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Determine TENGU_MODE
+      - name: Determine FE_MODE
         run: |
           if [[ "$GITHUB_REF" == "refs/tags/v"* ]]; then
-            echo "TENGU_MODE=production" >> $GITHUB_ENV
+            echo "FE_MODE=production" >> $GITHUB_ENV
           else
-            echo "TENGU_MODE=staging" >> $GITHUB_ENV
+            echo "FE_MODE=staging" >> $GITHUB_ENV
           fi
 
       - name: Trigger Production Webhook (if applicable)
-        if: env.TENGU_MODE == 'production'
+        if: env.FE_MODE == 'production'
         run: |
           echo "✅ Version tag detected — triggering **production** deployment via webhook!"
           curl -X POST -d "{}" "${{ secrets.PRODUCTION_WEBHOOK_URL }}" -H "Content-Type: application/json"
 
-      - name: Log TENGU_MODE Info
+      - name: Log FE_MODE Info
         run: |
-          if [[ "${{ env.TENGU_MODE }}" == "staging" ]]; then
+          if [[ "${{ env.FE_MODE }}" == "staging" ]]; then
             echo "🚧 Push to main branch detected without version tag — handled by **Amplify** for staging preview."
           else
             echo "🚀 Production deployment already triggered above via webhook."
@@ -55,7 +55,7 @@ jobs:
           echo $! > server.pid  # Store server process ID
 
       - name: Wait for Server to Be Ready
-        run: npx wait-on http://localhost:8081
+        run: npx wait-on http://localhost:8080
 
       - name: Execute Cypress Tests Before Deployment
         run: npm run test:ci

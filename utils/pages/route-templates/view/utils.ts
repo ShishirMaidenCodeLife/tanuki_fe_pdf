@@ -10,11 +10,11 @@ import {
 
 import * as T from "@/types";
 import {
-  CustomEdgeType,
+  CHParentEdgeType,
   ItemType,
-  CustomNodeNoPosType,
-  CustomNodeType,
-  CustomNodeNoPosDataType,
+  CHNodeNoPosType,
+  CHNodeType,
+  CHNodeNoPosDataType,
 } from "@/types/new-types";
 import { markdownToJSON } from "@/utils/methods/md_editor";
 import { DEFAULT_ROADMAP_TITLE } from "@/utils/pages/route-templates/view/constants";
@@ -23,7 +23,7 @@ import { parseRouteNodeId } from "@/utils/pages/route-templates/view/ids";
 
 // Check if both nodes are grandparents
 export const areBothGrandparents = (
-  nodes: T.RFCustomNodeType[],
+  nodes: T.RFCHNodeType[],
   d: T.RFEdgeDataType,
 ) => {
   // Find the source and target nodes
@@ -56,7 +56,7 @@ export const checkForGroups = (d: T.RFNodeDataType) => {
 };
 
 // Get the node details
-export const getRouteNodeDetails = (d: T.RFCustomNodeType) => {
+export const getRouteNodeDetails = (d: T.RFCHNodeType) => {
   const { indexGrandparent = 0 } = parseRouteNodeId(d.id);
   const isEvenGrandparentNode = indexGrandparent % 2 === 0;
   const evenNodeMultiplier = isEvenGrandparentNode ? 1 : -1;
@@ -81,6 +81,44 @@ export const checkIfChild = (id?: string | unknown): boolean =>
 export const checkIfEdge = (id?: string | unknown): boolean =>
   typeof id === "string" && id.startsWith("edge-");
 
+// Generate consistent edge ID from source and target IDs
+export const generateEdgeId = (sourceId: string, targetId: string): string =>
+  `edge-${sourceId}-${targetId}`;
+
+// Color cycling utility for edges (white, green, blue, red)
+export const getEdgeColorByIndex = (index: number): string => {
+  const colors = ["#FFFFFF", "#10B981", "#3B82F6", "#EF4444"]; // white, green, blue, red
+
+  return colors[index % colors.length];
+};
+
+// Get edge color based on node name/title initials
+export const getEdgeColorByNodeName = (nodeName: string): string => {
+  // const colors = ["#FFFFFF", "#10B981", "#3B82F6", "#EF4444"]; // white, green, blue, red
+  const colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]; // white, green, blue, red
+
+  // Extract initials or use first few characters
+  const initials = nodeName
+    .split(/\s+/) // Split by whitespace
+    .map((word) => word.charAt(0).toUpperCase()) // Get first letter of each word
+    .join(""); // Join them together
+
+  // If no initials found, use first character
+  const keyString = initials || nodeName.charAt(0).toUpperCase();
+
+  // Create a simple hash from the key string
+  let hash = 0;
+
+  for (let i = 0; i < keyString.length; i++) {
+    hash = keyString.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Use absolute value to ensure positive index
+  const colorIndex = Math.abs(hash) % colors.length;
+
+  return colors[colorIndex];
+};
+
 export const getChildIdxFromId = (id: string) => {
   const childIdx = Number(id.split("-")[2]);
   const result = isNaN(childIdx) ? 0 : childIdx;
@@ -88,48 +126,149 @@ export const getChildIdxFromId = (id: string) => {
   return result;
 };
 
-// Utility to get edge params for side-to-side connection
-export const getEdgeParams = (sourceNode: any, targetNode: any) => {
-  // const sourceBounds = sourceNode.measured || { width: 0, height: 0 };
-  // const targetBounds = targetNode.measured || { width: 0, height: 0 };
-  // const sx = sourceNode.internals.positionAbsolute.x + sourceBounds.width;
-  // const sy = sourceNode.internals.positionAbsolute.y + sourceBounds.height / 2;
-  // const tx = targetNode.internals.positionAbsolute.x;
-  // const ty = targetNode.internals.positionAbsolute.y + targetBounds.height / 2;
-  const sx = 0;
-  const sy = 0;
-  const tx = 0;
-  const ty = targetNode.internals.positionAbsolute.y + NODE_HEADER_HEIGHT / 2; // 112 is the height of the node's header container
+// Utility to get edge params for different types of connections
+export const getEdgeParams = (
+  sourceNode: any,
+  targetNode: any,
+  selectedItemId?: string,
+  offset: number = -24,
+) => {
+  const sourceBounds = sourceNode.measured || { width: 0, height: 0 };
+  const targetBounds = targetNode.measured || { width: 0, height: 0 };
 
-  return {
-    sx,
-    sy,
-    tx,
-    ty,
-    sourcePos: Position.Right,
-    targetPos: Position.Left,
-  };
+  // Check if this is a parent-to-child connection
+  const isParentToChild =
+    checkIfParent(sourceNode.id) && checkIfChild(targetNode.id);
+
+  if (isParentToChild) {
+    // Calculate source Y position based on selected item or use header mid-point as fallback
+    let sourceY =
+      sourceNode.internals.positionAbsolute.y + NODE_HEADER_HEIGHT / 2;
+
+    // If there's a selected item, position the edge at that item's mid-point
+    if (selectedItemId && sourceNode.data?.items) {
+      const selectedItemIndex = sourceNode.data.items.findIndex(
+        (item: any) => item.id === selectedItemId,
+      );
+
+      if (selectedItemIndex !== -1) {
+        // Calculate the Y position of the selected item
+        // Header height + padding + (item index * item height) + (item height / 2)
+        sourceY =
+          sourceNode.internals.positionAbsolute.y +
+          NODE_HEADER_HEIGHT +
+          16 + // padding top from the content section
+          selectedItemIndex * 83.2 + // item height (5.2rem = 83.2px)
+          83.2 / 2; // Mid-point of the item
+      }
+    }
+
+    // Determine if child is on left or right side based on position
+    const isChildOnRight =
+      targetNode.internals.positionAbsolute.x >
+      sourceNode.internals.positionAbsolute.x;
+
+    if (isChildOnRight) {
+      // Child is on the right side: connect from right side of parent to left side of child header
+      const sx = sourceNode.internals.positionAbsolute.x + sourceBounds.width;
+      const sy = sourceY;
+      const tx = targetNode.internals.positionAbsolute.x + offset; // Add offset to prevent arrow hiding
+      const ty =
+        targetNode.internals.positionAbsolute.y + NODE_HEADER_HEIGHT / 2;
+
+      return {
+        sx,
+        sy,
+        tx,
+        ty,
+        sourcePos: Position.Right,
+        targetPos: Position.Left,
+      };
+    } else {
+      // Child is on the left side: connect from left side of parent to right side of child header
+      const sx = sourceNode.internals.positionAbsolute.x;
+      const sy = sourceY;
+      const tx =
+        targetNode.internals.positionAbsolute.x + targetBounds.width - offset; // Subtract offset to prevent arrow hiding
+      const ty =
+        targetNode.internals.positionAbsolute.y + NODE_HEADER_HEIGHT / 2;
+
+      return {
+        sx,
+        sy,
+        tx,
+        ty,
+        sourcePos: Position.Left,
+        targetPos: Position.Right,
+      };
+    }
+  } else {
+    // For parent-to-parent connections: bottom-to-top connections
+    const sx = sourceNode.internals.positionAbsolute.x + sourceBounds.width / 2;
+    const sy = sourceNode.internals.positionAbsolute.y + sourceBounds.height;
+    const tx = targetNode.internals.positionAbsolute.x + targetBounds.width / 2;
+    const ty = targetNode.internals.positionAbsolute.y + offset; // Add offset to prevent arrow hiding
+
+    return {
+      sx,
+      sy,
+      tx,
+      ty,
+      sourcePos: Position.Bottom,
+      targetPos: Position.Top,
+    };
+  }
 };
 
-export const areNodesOverlapping = (
-  node1: CustomNodeType,
-  node2: CustomNodeType,
-) => {
-  // Using node width of 172px and height of NODE_HEADER_HEIGHT (112px) to detect touching
+// Helper function to calculate dynamic node height based on content
+export const calculateDynamicNodeHeight = (node: CHNodeType): number => {
+  const headerHeight = NODE_HEADER_HEIGHT; // 112px for header
+  const itemHeight = 112; // Approximately 7rem (112px) per item - updated for enhanced dimensions
+  const paddingBottom = 16; // 4 units of padding bottom
+  const baseMinHeight = 50; // From Reorder.Group minHeight
+
+  // Count the number of items in the node
+  const itemCount = node.data.items?.length || 0;
+
+  // Calculate total content height
+  const contentHeight = itemCount * itemHeight;
+
+  // Total estimated height: header + content + padding
+  const totalHeight =
+    headerHeight + Math.max(contentHeight, baseMinHeight) + paddingBottom;
+
+  return totalHeight;
+};
+
+export const areNodesOverlapping = (node1: CHNodeType, node2: CHNodeType) => {
+  // Use actual node dimensions: min-w-[480px] for width and dynamic height based on content
+  const nodeWidth = 480; // Matches min-w-[480px] from CHNode
+
+  // Calculate dynamic heights for both nodes
+  const node1Height = calculateDynamicNodeHeight(node1);
+  const node2Height = calculateDynamicNodeHeight(node2);
+
+  // Use the average height for overlap detection
+  const avgHeight = (node1Height + node2Height) / 2;
+
   const dx = Math.abs(node1.position.x - node2.position.x);
   const dy = Math.abs(node1.position.y - node2.position.y);
 
-  // When nodes touch, their centers are 172px apart horizontally or NODE_HEADER_HEIGHT apart vertically
-  return dx < 172 && dy < NODE_HEADER_HEIGHT;
+  // More generous overlap detection - trigger swap when nodes actually intersect
+  // Allow for some margin so swapping feels more natural
+  const horizontalOverlap = dx < nodeWidth * 0.7; // 70% of node width (336px)
+  const verticalOverlap = dy < avgHeight * 1; // 80% of average node height for better overlap detection
+
+  return horizontalOverlap && verticalOverlap;
 };
 
 export const mdToNestedTree = (md: string) => {
   const tokens = marked.lexer(md);
-  const result: CustomNodeNoPosType[] = [];
+  const result: CHNodeNoPosType[] = [];
 
   let parentIndex = 1;
 
-  let currentNode: CustomNodeNoPosType | null = null;
+  let currentNode: CHNodeNoPosType | null = null;
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
@@ -171,7 +310,7 @@ export const mdToNestedTree = (md: string) => {
           }
         }
 
-        const topLevelItem: CustomNodeNoPosDataType = {
+        const topLevelItem: CHNodeNoPosDataType = {
           id: topLevelId,
           title: topLevelLabel,
           ...(subItems.length > 0 ? { items: subItems } : {}),
@@ -191,29 +330,44 @@ export const mdToNestedTree = (md: string) => {
   return { MD_NODES, MD_EDGES };
 };
 
-export const generateParentEdges = (nodes: CustomNodeType[]) => {
-  const edges: CustomEdgeType[] = [];
+export const generateParentEdges = (nodes: CHNodeType[]) => {
+  const edges: CHParentEdgeType[] = [];
 
   for (let i = 1; i < nodes?.length; i++) {
+    const sourceId = `parent-${i}`;
+    const targetId = `parent-${i + 1}`;
+
+    // Get the source node to extract its title for color generation
+    const sourceNode = nodes.find((node) => node.id === sourceId);
+    const edgeColor = sourceNode?.data?.title
+      ? getEdgeColorByNodeName(sourceNode.data.title)
+      : getEdgeColorByIndex(i - 1);
+
     edges.push({
-      id: `parent-${i}-${i + 1}`,
-      source: `parent-${i}`,
-      target: `parent-${i + 1}`,
+      id: generateEdgeId(sourceId, targetId),
+      source: sourceId,
+      target: targetId,
+      type: "customListItem",
       markerEnd: {
         type: MarkerType.ArrowClosed,
         width: 40,
         height: 40,
-        color: "#FFF",
+        color: edgeColor,
       },
       label: `Level your skill ${i}`,
       style: {
         strokeWidth: 4,
-        stroke: "#FFF",
+        stroke: edgeColor,
       },
       labelBgPadding: [16, 16],
       labelStyle: {
         fontSize: 20,
         fill: "green",
+      },
+      data: {
+        parentIdx: i - 1,
+        isParentToParentEdge: true,
+        color: edgeColor,
       },
     });
   }
@@ -222,7 +376,7 @@ export const generateParentEdges = (nodes: CustomNodeType[]) => {
 };
 
 export const assignParentPositions = (
-  nodes: CustomNodeNoPosType[],
+  nodes: CHNodeNoPosType[],
   draggable = true,
 ) => {
   let y = 0; // Parent y position will be dynamically calculated
@@ -231,8 +385,15 @@ export const assignParentPositions = (
     // Parent x position as per index based on even/odd
     const x = index % 2 === 0 ? PARENT_X_LEFT : PARENT_X_RIGHT;
 
-    // Parent y position as per the parent vertical spacing
-    y += 5 * PARENT_VERTICAL_SPACING;
+    // Calculate dynamic spacing based on node content
+    if (index > 0) {
+      // Get the previous node to calculate spacing based on its content
+      const previousNode = nodes[index - 1];
+      const estimatedHeight = calculateNodeHeight(previousNode);
+
+      // Add spacing: estimated height + gap between nodes
+      y += estimatedHeight + PARENT_VERTICAL_SPACING;
+    }
 
     return {
       ...node,
@@ -240,6 +401,26 @@ export const assignParentPositions = (
       position: { x, y },
     };
   });
+};
+
+// Helper function to estimate node height based on content
+const calculateNodeHeight = (node: CHNodeNoPosType): number => {
+  const headerHeight = NODE_HEADER_HEIGHT; // 112px for header
+  const itemHeight = 112; // Approximately 7rem (112px) per item - updated for enhanced dimensions
+  const paddingBottom = 16; // 4 units of padding bottom
+  const baseMinHeight = 50; // From Reorder.Group minHeight
+
+  // Count the number of items in the node
+  const itemCount = node.data.items?.length || 0;
+
+  // Calculate total content height
+  const contentHeight = itemCount * itemHeight;
+
+  // Total estimated height: header + content + padding
+  const totalHeight =
+    headerHeight + Math.max(contentHeight, baseMinHeight) + paddingBottom;
+
+  return totalHeight;
 };
 
 // Remove the first heading (H1) from the markdown JSON object

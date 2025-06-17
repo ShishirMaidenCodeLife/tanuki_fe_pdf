@@ -68,22 +68,22 @@ export const siteImages = {
     tanuki: {
       banner: {
         dark: {
-          default: `${env.CLOUDINARY_URL}/tanuki-banner-dark`,
+          default: `${env.FE_CLOUDINARY_URL}/tanuki-banner-dark`,
           fallback: "/images/png/tanuki/tanuki-banner-dark.png",
         },
         light: {
-          default: `${env.CLOUDINARY_URL}/tanuki-banner-light`,
+          default: `${env.FE_CLOUDINARY_URL}/tanuki-banner-light`,
           fallback: "/images/png/tanuki/tanuki-banner-light.png",
         },
       },
 
       bg: {
         dark: {
-          default: `${env.CLOUDINARY_URL}/tanuki-bg-dark`,
+          default: `${env.FE_CLOUDINARY_URL}/tanuki-bg-dark`,
           fallback: "/images/png/tanuki/tanuki-bg-dark.png",
         },
         light: {
-          default: `${env.CLOUDINARY_URL}/tanuki-bg-light`,
+          default: `${env.FE_CLOUDINARY_URL}/tanuki-bg-light`,
           fallback: "/images/png/tanuki/tanuki-bg-light.png",
         },
       },

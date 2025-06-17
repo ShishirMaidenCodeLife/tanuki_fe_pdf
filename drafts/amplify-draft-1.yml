@@ -9,14 +9,14 @@ frontend:
         - |
           if [[ "$AWS_COMMIT_REF" == refs/tags/v* ]]; then
             echo "🌟 **Production Deployment Detected!** 🚀"
-            export TENGU_MODE=production
-            echo "TENGU_MODE=$TENGU_MODE - Setting up for **Production**... 🌍"
-            echo "TENGU_MODE=$TENGU_MODE" >> .env.production
+            export FE_MODE=production
+            echo "FE_MODE=$FE_MODE - Setting up for **Production**... 🌍"
+            echo "FE_MODE=$FE_MODE" >> .env.production
           elif [ "$AWS_BRANCH" == "main" ]; then
             echo "🎉 **Staging Deployment Detected!** Preparing for a preview! 🚧"
-            export TENGU_MODE=staging
-            echo "TENGU_MODE=$TENGU_MODE - Setting up for **Staging**... 🛠️"
-            echo "TENGU_MODE=$TENGU_MODE" >> .env.staging
+            export FE_MODE=staging
+            echo "FE_MODE=$FE_MODE - Setting up for **Staging**... 🛠️"
+            echo "FE_MODE=$FE_MODE" >> .env.staging
           fi
         - 'echo "Installing dependencies... 🌱"'
         - npm install
@@ -43,4 +43,4 @@ frontend:
   # For AWS Amplify, use the proper environment variables format
   env:
     variables:
-      TENGU_MODE: ${TENGU_MODE}
+      FE_MODE: ${FE_MODE}

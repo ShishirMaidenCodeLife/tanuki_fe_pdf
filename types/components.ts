@@ -47,6 +47,7 @@ export type ContainerType = {
   isCenter?: boolean;
   extendCss?: string;
   className?: string;
+  isMaxWidth?: boolean;
 };
 
 // Used when the button gets disabled but still need an onClick feature so that button gets surrounded with this div

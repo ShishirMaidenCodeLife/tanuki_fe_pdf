@@ -10,7 +10,7 @@ import { wrapText } from "@/utils/methods/text";
 import {
   D3SelectionAllType,
   DefaultType,
-  RoadmapCustomNodeType,
+  RoadmapCHNodeType,
   RoadmapTitleType,
   TextOffsetType,
   RoadmapStoreType,
@@ -84,8 +84,8 @@ export const appendSegmentText = (params: {
 
 // Get: Text rotation based on the quadrant
 export const getTextRotation = (
-  qd: RoadmapCustomNodeType["quadrantFlags"],
-  d?: RoadmapCustomNodeType,
+  qd: RoadmapCHNodeType["quadrantFlags"],
+  d?: RoadmapCHNodeType,
 ) => {
   const rotation = qd?.isTopLeft
     ? _constants.ROTATION_TOP_LEFT - _constants.ROTATION_TEXT_DEFAULT
@@ -111,8 +111,8 @@ export const getTextRotation = (
 
 // Calculate: Text offset based on the quadrant and depth
 export const getTextOffset = (
-  d: RoadmapCustomNodeType,
-  qd: RoadmapCustomNodeType["quadrantFlags"],
+  d: RoadmapCHNodeType,
+  qd: RoadmapCHNodeType["quadrantFlags"],
   length: number = 160,
 ) => {
   // Variable: Destructure the node d
@@ -159,7 +159,7 @@ export const getTextOffset = (
 
 // Calculate: Skeleton text offset based on the quadrant and depth
 export const getSkeletonTextOffset = (params: {
-  d: RoadmapCustomNodeType;
+  d: RoadmapCHNodeType;
   length?: number;
 }): TextOffsetType => {
   // Variable
@@ -252,7 +252,7 @@ export const getSkeletonTextOffset = (params: {
 // Append: Text to the node
 export const appendNodeText = (params: {
   nodeEnter: D3SelectionAllType;
-  quadrantFlags: RoadmapCustomNodeType["quadrantFlags"];
+  quadrantFlags: RoadmapCHNodeType["quadrantFlags"];
 }) => {
   // Destructure the parameters
   const { nodeEnter, quadrantFlags: qd } = params;
@@ -271,10 +271,10 @@ export const appendNodeText = (params: {
     // Set text attributes
     textElement
       .attr("dy", "0.31em")
-      .attr("text-anchor", (d: RoadmapCustomNodeType) =>
+      .attr("text-anchor", (d: RoadmapCHNodeType) =>
         d?.children ? "end" : "start",
       )
-      .each(function (this: SVGElement, d: RoadmapCustomNodeType) {
+      .each(function (this: SVGElement, d: RoadmapCHNodeType) {
         // Destructure the current node with defaults
         const { isFirstParent, data: { name = "" } = {} } = d ?? {};
 
@@ -313,15 +313,13 @@ export const appendNodeText = (params: {
     textElement
       .attr(
         "class",
-        (d: RoadmapCustomNodeType) => _styles.adjustColorClass(d) || "",
+        (d: RoadmapCHNodeType) => _styles.adjustColorClass(d) || "",
       )
-      .style("fill", (d: RoadmapCustomNodeType) =>
+      .style("fill", (d: RoadmapCHNodeType) =>
         d?.isHighlighted || null ? d?.parentColor || null : "currentColor",
       )
-      .style("font-size", (d: RoadmapCustomNodeType) =>
-        _styles.getNodeFontSize(d),
-      )
-      .style("font-weight", (d: RoadmapCustomNodeType) =>
+      .style("font-size", (d: RoadmapCHNodeType) => _styles.getNodeFontSize(d))
+      .style("font-weight", (d: RoadmapCHNodeType) =>
         _styles.adjustDepthFontWeight(d?.depth),
       );
   });

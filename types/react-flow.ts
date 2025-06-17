@@ -5,13 +5,13 @@ import { CreateToastPayloadType } from "@/types";
 export type RFConnectedNodesType = {
   currentHeading: string;
   currentDraggedNodePos: { x: number; y: number };
-  INITIAL_NODES?: RFCustomNodeType[];
-  nodes: RFCustomNodeType[];
-  sourceNode: RFCustomNodeType;
-  targetNode: RFCustomNodeType;
-  setNodes: (nodes: RFCustomNodeType[]) => void;
+  INITIAL_NODES?: RFCHNodeType[];
+  nodes: RFCHNodeType[];
+  sourceNode: RFCHNodeType;
+  targetNode: RFCHNodeType;
+  setNodes: (nodes: RFCHNodeType[]) => void;
   setMd: (md: string) => void;
-  activeParentNode?: RFCustomNodeType;
+  activeParentNode?: RFCHNodeType;
   toast?: CreateToastPayloadType;
 };
 
@@ -24,7 +24,7 @@ export type RFNodeDataType = {
   grandparentId?: string;
   color?: string;
   strokeColor?: string;
-  setNodes?: (nodes: RFCustomNodeType[]) => void;
+  setNodes?: (nodes: RFCHNodeType[]) => void;
 };
 
 export type RFNodeIndicesType = {
@@ -33,7 +33,7 @@ export type RFNodeIndicesType = {
   indexChild?: number | null;
 };
 
-export interface RFCustomNodeType extends Node<RFNodeDataType> {
+export interface RFCHNodeType extends Node<RFNodeDataType> {
   idx?: {
     grandparent: string | null;
     parent: string | null;
@@ -52,14 +52,14 @@ export type RFEdgeDataType = {
   markerEnd?: EdgeMarkerType;
 };
 
-export interface RFCustomEdgeType extends Edge<RFEdgeDataType> {
+export interface RFCHParentEdgeType extends Edge<RFEdgeDataType> {
   edgeGroup?:
     | "grandparentToGrandparentEdge"
     | "grandparentToParentEdge"
     | "parentToChildEdge";
 }
 
-export type RFNodeMouseHandler<CustomNodeType extends RFCustomNodeType> = (
+export type RFNodeMouseHandler<CHNodeType extends RFCHNodeType> = (
   event: MouseEvent,
-  node: CustomNodeType,
+  node: CHNodeType,
 ) => void;

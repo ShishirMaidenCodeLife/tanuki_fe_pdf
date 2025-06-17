@@ -19,7 +19,7 @@ export type ItemType = {
   // isTodo?: boolean;
 };
 
-export interface CustomNodeDataType extends Record<string, unknown> {
+export interface CHNodeDataType extends Record<string, unknown> {
   items: ItemType[];
   // id: string;
   title?: string;
@@ -28,8 +28,15 @@ export interface CustomNodeDataType extends Record<string, unknown> {
   isCheckable?: boolean;
   // selectedItemId?: string | null;
   onItemClick?: (itemId?: string | unknown) => void;
-  onNodeDelete?: (id: string | unknown) => void;
-  onItemDelete?: (id: string | unknown, itemId: string) => void;
+  onItemDelete?: (id: string | unknown, itemId?: string) => void;
+  onItemReorder?: (
+    nodeId: string,
+    newOrder: ItemType[],
+    isChildNode?: boolean,
+    parentItemId?: string,
+  ) => void;
+  onAddItem?: (afterItemId: string) => void;
+  onTitleChange?: (nodeId: string, newTitle: string) => void;
 }
 
 export type CustomPositionType = {
@@ -37,24 +44,26 @@ export type CustomPositionType = {
   y: number;
 };
 
-export interface CustomNodeType extends Node<CustomNodeDataType> {
+export interface CHNodeType extends Node<CHNodeDataType> {
   title?: string;
 }
 
-export type CustomNodeNoPosType = Omit<CustomNodeType, "position">;
-export type CustomNodeNoPosDataType = Omit<CustomNodeType, "data" | "position">;
+export type InitialPositionsRefType = Map<string, CustomPositionType>;
 
-export interface CustomCustomNodeType extends Omit<NodeProps, "data"> {
-  data: CustomNodeDataType;
+export type CHNodeNoPosType = Omit<CHNodeType, "position">;
+export type CHNodeNoPosDataType = Omit<CHNodeType, "data" | "position">;
+
+export interface CustomCHNodeType extends Omit<NodeProps, "data"> {
+  data: CHNodeDataType;
 }
 
-// export type CustomEdgeType = {
+// export type CHParentEdgeType = {
 //   id: string;
 //   source: string;
 //   target: string;
 // };
 
-export interface CustomEdgeType {
+export interface CHParentEdgeType {
   id: string;
   source: string;
   target: string;
@@ -95,13 +104,21 @@ export interface MyListItemEdgeProps extends EdgeProps {
 
 export type UseMindMapStoreState = {
   // Required variables
-  nodes: CustomNodeDataType | {};
+  nodes: CHNodeDataType | {};
   nodesDraggable: boolean;
   setNodesDraggable: (draggable: boolean) => void;
   selectedItemId: string | null;
   setSelectedItemId: (id: string | null) => void;
+  activeChildId: string | null; // Track which child node should be displayed
+  setActiveChildId: (id: string | null) => void;
+  activeParentId: string | null; // Track which parent has the active child
+  setActiveParentId: (id: string | null) => void;
+  isUpdatingMdAfterReorder: boolean; // Track when we're updating MD after child reorder
+  setIsUpdatingMdAfterReorder: (updating: boolean) => void;
   canReorder: boolean;
   setCanReorder: (canReorder: boolean) => void;
+  draggingNodeId: string | null;
+  setDraggingNodeId: (id: string | null) => void;
 
   // // Parent node CRUD
   // updateParent: (id: string, title: string, items: ItemType[]) => void;

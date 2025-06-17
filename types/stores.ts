@@ -6,9 +6,9 @@ export type RoadmapStoreType = {
 
   // Dashboard parameters
   dashboardParams: {
-    selectedCategory: string;
+    selectedCategories: string[];
   };
-  setSelectedCategory: (selectedCategory: string) => void;
+  setSelectedCategories: (selectedCategories: string[]) => void;
   setDashboardParams: (
     dashboardParams: RoadmapStoreType["dashboardParams"],
   ) => void;

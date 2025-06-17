@@ -37,6 +37,7 @@
     "cypress/**/*.ts",
     "cypress/**/*.tsx",
     "types/next-env.d.ts",
+    "_scripts",
     "out/types/**/*.ts"
   ],
   "exclude": ["node_modules"]

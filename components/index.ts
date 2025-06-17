@@ -113,9 +113,9 @@ export {
 
 // pages/route-templates
 export { RouteTemplateViewPageClient } from "./pages/dashboard/route-templates/view";
-export { CustomEdge } from "./pages/dashboard/route-templates/view/CustomEdge";
-export { CustomListItemEdge } from "./pages/dashboard/route-templates/view/CustomListItemEdge";
-export { CustomNode } from "./pages/dashboard/route-templates/view/CustomNode";
+export { CHParentEdge } from "./pages/dashboard/route-templates/view/ui/chart/CHParentEdge";
+export { CHChildEdge } from "./pages/dashboard/route-templates/view/ui/chart/CHChildEdge";
+export { CHNode } from "./pages/dashboard/route-templates/view/ui/chart/CHNode";
 export { ErrorPageClient } from "./pages/errors/error";
 export { HelpAndFeedbackPageClient } from "./pages/dashboard/help-and-feedback";
 export { LoginPageClient } from "./pages/auth/login";

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 
 import { QUERY_KEYS, RETRY, STALE_TIME } from "./constants";
 import { AvailableQueryType } from "./types";
@@ -8,7 +8,7 @@ import { RT_API } from "@/utils/constants/api-constants";
 
 export const createAvailableQueryHooks = ({
   auth,
-  selectedCategory,
+  selectedCategories,
   keys,
   params,
 }: AvailableQueryType) => {
@@ -22,17 +22,19 @@ export const createAvailableQueryHooks = ({
     staleTime: STALE_TIME,
   };
 
-  // Gets a single category of route templates
+  // Gets multiple categories of route templates
   const useGetByCategory = () =>
-    useQuery({
-      queryKey: QUERY_KEYS.getByCategory(auth),
-      queryFn: () =>
-        getApiBaseService({
-          auth,
-          route: RT_API.getByCategory(selectedCategory),
-        }),
-      enabled: !!selectedCategory && keys.includes("useGetByCategory"),
-      ...commonQueryProps,
+    useQueries({
+      queries: (selectedCategories || []).map((category) => ({
+        queryKey: [...QUERY_KEYS.getByCategory(auth), category],
+        queryFn: () =>
+          getApiBaseService({
+            auth,
+            route: RT_API.getByCategory(category),
+          }),
+        enabled: !!category && keys.includes("useGetByCategory"),
+        ...commonQueryProps,
+      })),
     });
 
   // Gets a single category of route templates

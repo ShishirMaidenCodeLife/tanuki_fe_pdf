@@ -1,14 +1,14 @@
 import { RoadmapTitleType } from "@/types";
-import { RoadmapCustomEdgeType, RoadmapCustomNodeType } from "@/types";
+import { RoadmapCHParentEdgeType, RoadmapCHNodeType } from "@/types";
 import { toKebabCase } from "@/utils/methods/string";
 import { MAP_PAGE_CLASS_DONUT_GROUP } from "@/utils/pages/map/constants";
 
 // Unique ID for each link
-export const getLinkId = (d: RoadmapCustomEdgeType) =>
+export const getLinkId = (d: RoadmapCHParentEdgeType) =>
   `link-${d.source.data.uuid}-${d.target.data.uuid}`;
 
 // Unique ID for each node
-export const getNodeId = (d: RoadmapCustomNodeType) => `node-${d.data.uuid}`;
+export const getNodeId = (d: RoadmapCHNodeType) => `node-${d.data.uuid}`;
 
 // Unique ID for each donut segment
 export const getDonutPathId = (
@@ -51,7 +51,7 @@ export const getDonutGroupId = (
 };
 
 // Unique ID for each checkbox
-export const getCheckboxId = (d: RoadmapCustomNodeType) =>
+export const getCheckboxId = (d: RoadmapCHNodeType) =>
   `checkbox-${d.data.uuid}`;
 
 export const getSegmentTextId = (d: d3.PieArcDatum<RoadmapTitleType>) =>

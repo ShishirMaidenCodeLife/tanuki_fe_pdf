@@ -1,11 +1,7 @@
 import { MutationOptions, UseQueryResult } from "@tanstack/react-query";
 import * as Axios from "axios";
 
-import {
-  D3HierarchyCustomNodeType,
-  DefaultType,
-  RoadmapDataType,
-} from "@/types";
+import { D3HierarchyCHNodeType, DefaultType, RoadmapDataType } from "@/types";
 
 // #region UseMutationHookType
 export type UseMutationHookType = {
@@ -30,7 +26,7 @@ export type RoadmapTitleType = {
 
 // Custom hook for initial non-AI api call of the roadmap
 export type UseQueryRoadmapHookType = {
-  chartData?: D3HierarchyCustomNodeType;
+  chartData?: D3HierarchyCHNodeType;
   rolesQuery: UseQueryResult<RolesQueryResponseType> | DefaultType;
   roadmapTitles: RoadmapTitleType[];
   roadmapResponses: UseQueryResult<RoadmapDataType>[] | DefaultType;

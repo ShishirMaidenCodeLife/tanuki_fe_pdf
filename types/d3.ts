@@ -53,21 +53,21 @@ export type D3SelectionDefsType = d3.Selection<
 >;
 
 // Route Page Types
-export type D3RouteCustomNodeType = {
+export type D3RouteCHNodeType = {
   d: DefaultType;
   isSelectedNode?: boolean;
   isFirstParentNode?: boolean;
 };
 
-export interface D3RpGroupType extends D3RouteCustomNodeType {
+export interface D3RpGroupType extends D3RouteCHNodeType {
   currentGroup: D3SelectionAllType;
 }
 
-export interface D3RpItemType extends D3RouteCustomNodeType {
+export interface D3RpItemType extends D3RouteCHNodeType {
   nodeItem: D3SelectionAllType;
 }
 
-export interface D3RpItemCircleType extends D3RouteCustomNodeType {
+export interface D3RpItemCircleType extends D3RouteCHNodeType {
   nodeItem: D3SelectionCircleType;
 }
 

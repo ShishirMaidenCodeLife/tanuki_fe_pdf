@@ -84,7 +84,9 @@ export const CommonBreadcrumbs = () => {
 
   const breadcrumbsClass = clsx([
     "common-breadcrumbs",
-    "text-sm absolute rounded-xl py-1 translate-y-[3rem] !z-drawer",
+    // "text-sm absolute rounded-xl py-1 translate-y-[3rem] !z-drawer",
+    "text-sm absolute rounded-xl py-1 translate-x-[2rem] translate-y-[4rem] !z-drawer",
+    "min-w-screen",
     isMounted &&
       "px-4 !backdrop-blur-[10px] apply_common_transition cursor-pointer bg-overlay40 hover:bg-overlay20/80",
   ]);

@@ -19,17 +19,17 @@ import { debounce, throttleRAF } from "@/utils/methods/perf";
 import {
   D3SelectionAllType,
   DefaultType,
-  RoadmapCustomNodeType,
+  RoadmapCHNodeType,
   RoadmapTitleType,
   RoadmapStoreType,
   UseQueryRoadmapHookType,
 } from "@/types";
-import { RoadmapCustomEdgeType, TextOffsetType } from "@/types";
+import { RoadmapCHParentEdgeType, TextOffsetType } from "@/types";
 
 export const handleMapTooltip = (
   show: boolean,
   event: MouseEvent,
-  d: d3.PieArcDatum<RoadmapTitleType> | RoadmapCustomNodeType,
+  d: d3.PieArcDatum<RoadmapTitleType> | RoadmapCHNodeType,
 ) => {
   const { param, name } = d?.data || {};
   const isGrandparent = d?.data?.group === "grandparent";
@@ -54,9 +54,9 @@ export const handleDonutGroupTextClick = (
 
 // Event: Handle node hover
 export const handleNodeHover = (params: {
-  currentNode: RoadmapCustomNodeType;
+  currentNode: RoadmapCHNodeType;
   d: d3.PieArcDatum<RoadmapTitleType>;
-  root: RoadmapCustomNodeType;
+  root: RoadmapCHNodeType;
   treeGroup?: DefaultType;
   show: boolean;
   showTextSkeleton?: boolean;
@@ -69,10 +69,10 @@ export const handleNodeHover = (params: {
   // const nodeDescendants = currentNode.descendants();
 
   // Variable: Get all links related to the current node and its related nodes
-  const relatedLinks = root.links().filter((link: RoadmapCustomEdgeType) => {
+  const relatedLinks = root.links().filter((link: RoadmapCHParentEdgeType) => {
     const isCurrentNodeLink = _utils.isLinkRelatedToNode(link, currentNode);
     const isRelatedAncestorLink = nodeAncestors.some(
-      (ancestor: RoadmapCustomNodeType) =>
+      (ancestor: RoadmapCHNodeType) =>
         _utils.isLinkRelatedToNode(link, ancestor, true),
     );
 
@@ -83,8 +83,8 @@ export const handleNodeHover = (params: {
   const relatedNodes = Array.from(
     new Map(
       relatedLinks
-        .flatMap((rl: RoadmapCustomEdgeType) => [rl.source, rl.target])
-        .map((node: RoadmapCustomNodeType) => [node.data.uuid, node]),
+        .flatMap((rl: RoadmapCHParentEdgeType) => [rl.source, rl.target])
+        .map((node: RoadmapCHNodeType) => [node.data.uuid, node]),
     ).values(),
   );
 
@@ -92,14 +92,14 @@ export const handleNodeHover = (params: {
   // Highlight the node related nodes
   treeGroup
     .selectAll(".node")
-    .filter((d: RoadmapCustomNodeType) =>
+    .filter((d: RoadmapCHNodeType) =>
       relatedNodes?.some(
-        (node: RoadmapCustomNodeType) => node?.data?.uuid === d?.data?.uuid,
+        (node: RoadmapCHNodeType) => node?.data?.uuid === d?.data?.uuid,
       ),
     )
     .style(
       "opacity",
-      (d: RoadmapCustomNodeType) => _styles.adjustOpacityHover(show, d),
+      (d: RoadmapCHNodeType) => _styles.adjustOpacityHover(show, d),
       // show ? 1 : undefined,
     );
 
@@ -108,9 +108,9 @@ export const handleNodeHover = (params: {
     .selectAll(".link")
     .filter((link: unknown) =>
       relatedLinks.some(
-        (rl: RoadmapCustomEdgeType) =>
-          rl.source === (link as RoadmapCustomEdgeType).source &&
-          rl.target === (link as RoadmapCustomEdgeType).target,
+        (rl: RoadmapCHParentEdgeType) =>
+          rl.source === (link as RoadmapCHParentEdgeType).source &&
+          rl.target === (link as RoadmapCHParentEdgeType).target,
       ),
     )
     .transition()
@@ -118,11 +118,11 @@ export const handleNodeHover = (params: {
     .attr("stroke", (insideEdge: DefaultType) =>
       show
         ? d?.data?.color
-        : (insideEdge as RoadmapCustomEdgeType)?.randomColor || null,
+        : (insideEdge as RoadmapCHParentEdgeType)?.randomColor || null,
     )
     .attr(
       "opacity",
-      // (d: RoadmapCustomNodeType) => _styles.adjustOpacityHover(show, d?.target, showTextSkeleton)
+      // (d: RoadmapCHNodeType) => _styles.adjustOpacityHover(show, d?.target, showTextSkeleton)
       show ? 1 : 0.5,
     )
     .style(
@@ -148,27 +148,25 @@ export const handleNodeHover = (params: {
   treeGroup
     .selectAll(".node circle")
     .filter((node: unknown) =>
-      nodeAncestors.includes(node as RoadmapCustomNodeType),
+      nodeAncestors.includes(node as RoadmapCHNodeType),
     )
     .transition()
     .duration(200)
     .attr("class", "bg-background")
-    .style("fill", (d: RoadmapCustomNodeType) => d?.parentColor || null)
-    .attr("r", (d: RoadmapCustomNodeType) =>
+    .style("fill", (d: RoadmapCHNodeType) => d?.parentColor || null)
+    .attr("r", (d: RoadmapCHNodeType) =>
       _styles.adjustNodeCircleHover(show, d),
     );
 
   // Highlight the node label as well
   treeGroup
     .selectAll(".node text")
-    .filter((node: RoadmapCustomNodeType) => node === currentNode)
-    .attr("class", (d: RoadmapCustomNodeType) =>
-      _styles.adjustColorClass(d, show),
-    )
-    .attr("text-decoration", (d: RoadmapCustomNodeType) =>
+    .filter((node: RoadmapCHNodeType) => node === currentNode)
+    .attr("class", (d: RoadmapCHNodeType) => _styles.adjustColorClass(d, show))
+    .attr("text-decoration", (d: RoadmapCHNodeType) =>
       show && !d?.isLastDepth ? "underline" : "none",
     )
-    .style("fill", (d: RoadmapCustomNodeType) =>
+    .style("fill", (d: RoadmapCHNodeType) =>
       !show || d?.isFirstParent ? "currentColor" : d.parentColor,
     );
 };
@@ -200,23 +198,23 @@ export const handleSegmentClick = (
 
 // Collapse all the children of a node
 const collapseChildren = (
-  node: RoadmapCustomNodeType | undefined,
+  node: RoadmapCHNodeType | undefined,
   show: boolean,
 ) => {
   if (!node?.children || !Array.isArray(node.children)) return; // Ensure children exist and are an array
 
-  node.children.forEach((child: RoadmapCustomNodeType) => {
+  node.children.forEach((child: RoadmapCHNodeType) => {
     child.collapsed = show; // Collapse the child
     collapseChildren(child, show); // Recursively collapse grandchildren
   });
 };
 
 // Toggle the collapse state of a node
-export const toggleNodeCollapse = (currentNode: RoadmapCustomNodeType) => {
+export const toggleNodeCollapse = (currentNode: RoadmapCHNodeType) => {
   // Get ancestors and filter out first parent
   const ancestors = currentNode
     .ancestors()
-    ?.filter((node: RoadmapCustomNodeType) => !node.isFirstParent);
+    ?.filter((node: RoadmapCHNodeType) => !node.isFirstParent);
   const descendants = currentNode.descendants();
 
   // Determine if the current node is expanding
@@ -235,7 +233,7 @@ export const toggleNodeCollapse = (currentNode: RoadmapCustomNodeType) => {
 };
 
 // Update the highlight state of a node
-export const adjustNodeHighlight = (currentNode: RoadmapCustomNodeType) => {
+export const adjustNodeHighlight = (currentNode: RoadmapCHNodeType) => {
   // Boundary Ensure currentNode is valid
   if (!currentNode) return;
 
@@ -255,23 +253,23 @@ export const adjustNodeHighlight = (currentNode: RoadmapCustomNodeType) => {
     // console.log("log", "COLLAPSED");
 
     // Workings for ancestors
-    ancestors.forEach((ancestor: RoadmapCustomNodeType) => {
+    ancestors.forEach((ancestor: RoadmapCHNodeType) => {
       // This will highlight the current node as well as its previous parents
       // So I do not need to highlight like this: descendant.isHighlighted = true in next section
       ancestor.isHighlighted = true;
 
       // If the current node is the same as the ancestor node and it has children
       if (data?.uuid === ancestor?.data?.uuid && ancestor?.children) {
-        ancestor.children.forEach((child: RoadmapCustomNodeType) => {
+        ancestor.children.forEach((child: RoadmapCHNodeType) => {
           child.isHighlighted = true;
         });
       }
     });
 
     // Workings for descendants
-    descendants.forEach((descendant: RoadmapCustomNodeType) => {
+    descendants.forEach((descendant: RoadmapCHNodeType) => {
       if (data?.uuid === descendant?.data?.uuid && descendant?.children) {
-        descendant.children.forEach((child: RoadmapCustomNodeType) => {
+        descendant.children.forEach((child: RoadmapCHNodeType) => {
           child.isHighlighted = true;
           child.collapsed = false;
         });
@@ -284,17 +282,17 @@ export const adjustNodeHighlight = (currentNode: RoadmapCustomNodeType) => {
     // console.log("log", "NOT COLLAPSED");
 
     // Workings for ancestors
-    ancestors.forEach((ancestor: RoadmapCustomNodeType) => {
+    ancestors.forEach((ancestor: RoadmapCHNodeType) => {
       if (data?.uuid === ancestor?.data?.uuid && ancestor?.children) {
         ancestor.isHighlighted = false;
-        ancestor.children.forEach((child: RoadmapCustomNodeType) => {
+        ancestor.children.forEach((child: RoadmapCHNodeType) => {
           child.isHighlighted = false;
         });
       }
     });
 
     const updateDescendantHighlight = (
-      node: RoadmapCustomNodeType,
+      node: RoadmapCHNodeType,
       highlight: boolean,
     ) => {
       // Base case: If no node is provided, exit the recursion
@@ -306,14 +304,14 @@ export const adjustNodeHighlight = (currentNode: RoadmapCustomNodeType) => {
 
       // Recursively update children if they exist
       if (node.children && node.children.length > 0) {
-        node.children.forEach((child: RoadmapCustomNodeType) => {
+        node.children.forEach((child: RoadmapCHNodeType) => {
           updateDescendantHighlight(child, highlight);
         });
       }
     };
 
     // Example usage within the loop
-    descendants.forEach((descendant: RoadmapCustomNodeType) => {
+    descendants.forEach((descendant: RoadmapCHNodeType) => {
       if (data?.uuid === descendant?.data?.uuid) {
         // descendant.isHighlighted = true;
         updateDescendantHighlight(descendant, false); // Set highlight to `false`
@@ -324,10 +322,10 @@ export const adjustNodeHighlight = (currentNode: RoadmapCustomNodeType) => {
 
 // Focus on a node
 export const focusNode = (params: {
-  currentNode: RoadmapCustomNodeType;
+  currentNode: RoadmapCHNodeType;
   roadmapQueries: UseQueryRoadmapHookType;
   roadmapStore: RoadmapStoreType;
-  quadrantFlags: RoadmapCustomNodeType["quadrantFlags"];
+  quadrantFlags: RoadmapCHNodeType["quadrantFlags"];
 }) => {
   // Variable: Destrucutre the parameters
   const { currentNode, roadmapQueries, roadmapStore, quadrantFlags } = params;
@@ -408,9 +406,9 @@ export const updateTree = (params: {
   d: d3.PieArcDatum<RoadmapTitleType>;
   group: D3SelectionAllType;
   roadmapQueries: UseQueryRoadmapHookType;
-  root: RoadmapCustomNodeType;
+  root: RoadmapCHNodeType;
   roadmapStore: RoadmapStoreType;
-  quadrantFlags: RoadmapCustomNodeType["quadrantFlags"];
+  quadrantFlags: RoadmapCHNodeType["quadrantFlags"];
 }) => {
   // Variable: Destructure the parameters
   const {
@@ -434,7 +432,7 @@ export const updateTree = (params: {
   const links = root.links();
 
   // Add a flag to check if the node is the last depth
-  nodes.forEach((node: RoadmapCustomNodeType) => {
+  nodes.forEach((node: RoadmapCHNodeType) => {
     node.isFirstParent = _utils.checkIfFirstParentNode(node, d);
     node.isLastDepth = _utils.checkIfLastDepthNode(node);
     node.parentColor = d?.data?.color;
@@ -443,13 +441,13 @@ export const updateTree = (params: {
       ...Object.entries(quadrantFlags).reduce(
         (acc: Record<string, boolean>, [key, value]) => {
           if (value) {
-            acc[key as keyof RoadmapCustomNodeType["quadrantFlags"]] = true;
+            acc[key as keyof RoadmapCHNodeType["quadrantFlags"]] = true;
           }
 
           return acc;
         },
         { ...c.INITIAL_QUADRANT_FLAGS } as Record<
-          keyof RoadmapCustomNodeType["quadrantFlags"],
+          keyof RoadmapCHNodeType["quadrantFlags"],
           boolean
         >,
       ),
@@ -457,7 +455,7 @@ export const updateTree = (params: {
   });
 
   // Add random colors to the links
-  links.forEach((link: RoadmapCustomEdgeType, index: number) => {
+  links.forEach((link: RoadmapCHParentEdgeType, index: number) => {
     link.randomColor = _styles.getColorByIndex(index);
   });
 
@@ -481,30 +479,33 @@ export const updateTree = (params: {
   const link: D3SelectionAllType = treeGroup
     .selectAll(".link")
     .data(links, (link: unknown) =>
-      _ids.getLinkId(link as RoadmapCustomEdgeType),
+      _ids.getLinkId(link as RoadmapCHParentEdgeType),
     );
 
   // Add new links and set their attributes
   link
     .enter()
     .append("path")
-    .attr("id", (link: RoadmapCustomEdgeType) => _ids.getLinkId(link))
+    .attr("id", (link: RoadmapCHParentEdgeType) => _ids.getLinkId(link))
     .attr("class", "link")
     .attr("fill", "none")
-    .attr("d", (link: RoadmapCustomEdgeType) =>
+    .attr("d", (link: RoadmapCHParentEdgeType) =>
       d3
-        .linkHorizontal<RoadmapCustomEdgeType, RoadmapCustomNodeType>()
+        .linkHorizontal<RoadmapCHParentEdgeType, RoadmapCHNodeType>()
         .x((node) => node.y || 0)
         .y((node) => node.x || 0)(link),
     )
     .merge(link)
-    .attr("opacity", (link: RoadmapCustomEdgeType) =>
+    .attr("opacity", (link: RoadmapCHParentEdgeType) =>
       _styles.adjustOpacity(link.target, showTextSkeleton),
     )
-    .attr("visibility", (link: RoadmapCustomEdgeType) =>
+    .attr("visibility", (link: RoadmapCHParentEdgeType) =>
       _styles.adjustVisibility(link?.target?.isHighlighted),
     )
-    .attr("stroke", (link: RoadmapCustomEdgeType) => link?.randomColor || null)
+    .attr(
+      "stroke",
+      (link: RoadmapCHParentEdgeType) => link?.randomColor || null,
+    )
     .attr("stroke-width", c.STROKE_WIDTH_DEFAULT);
 
   // Remove links that no longer exist
@@ -513,7 +514,7 @@ export const updateTree = (params: {
   // Variable: Select all nodes and bind the data
   const node: D3SelectionAllType = treeGroup
     .selectAll(".node")
-    .data(nodes, (d: unknown) => _ids.getNodeId(d as RoadmapCustomNodeType));
+    .data(nodes, (d: unknown) => _ids.getNodeId(d as RoadmapCHNodeType));
   // Cache: Debounce the update tree function
   const debouncedUpdateTree = debounce(updateTree, 200);
 
@@ -521,12 +522,12 @@ export const updateTree = (params: {
   const nodeEnter: D3SelectionAllType = node
     .enter()
     .append("g")
-    .attr("id", (d: RoadmapCustomNodeType) => _ids.getNodeId(d))
+    .attr("id", (d: RoadmapCHNodeType) => _ids.getNodeId(d))
     .attr("class", "node")
-    .attr("transform", (d: RoadmapCustomNodeType) => `translate(${d.y},${d.x})`)
+    .attr("transform", (d: RoadmapCHNodeType) => `translate(${d.y},${d.x})`)
     .attr("cursor", "pointer")
-    .attr("opacity", (d: RoadmapCustomNodeType) => _styles.adjustOpacity(d))
-    .on("click", (_: MouseEvent, currentNode: RoadmapCustomNodeType) => {
+    .attr("opacity", (d: RoadmapCHNodeType) => _styles.adjustOpacity(d))
+    .on("click", (_: MouseEvent, currentNode: RoadmapCHNodeType) => {
       focusNode({
         currentNode,
         roadmapQueries,
@@ -538,14 +539,11 @@ export const updateTree = (params: {
       adjustNodeHighlight(currentNode);
       debouncedUpdateTree(params); // debouncedUpdateTree({ ...params, nodesRoot: newNodesRoot });
     })
-    .on(
-      "mousemove",
-      (event: MouseEvent, currentNode: RoadmapCustomNodeType) => {
-        handleNodeHover({ ...hoverParams, currentNode, show: true });
-        handleMapTooltip(true, event, currentNode);
-      },
-    )
-    .on("mouseout", (event: MouseEvent, currentNode: RoadmapCustomNodeType) => {
+    .on("mousemove", (event: MouseEvent, currentNode: RoadmapCHNodeType) => {
+      handleNodeHover({ ...hoverParams, currentNode, show: true });
+      handleMapTooltip(true, event, currentNode);
+    })
+    .on("mouseout", (event: MouseEvent, currentNode: RoadmapCHNodeType) => {
       handleNodeHover({ ...hoverParams, currentNode, show: false });
       handleMapTooltip(false, event, currentNode);
     });
@@ -553,10 +551,10 @@ export const updateTree = (params: {
   // Merge existing nodes (those already in the DOM) and newly appended nodes
   node
     .merge(nodeEnter) // Merge updates to newly appended and existing nodes
-    .attr("opacity", (d: RoadmapCustomNodeType) => _styles.adjustOpacity(d))
+    .attr("opacity", (d: RoadmapCHNodeType) => _styles.adjustOpacity(d))
     .attr(
       "transform",
-      (d: RoadmapCustomNodeType) =>
+      (d: RoadmapCHNodeType) =>
         _texts.getTextRotation(quadrantFlags, d)?.transform,
     );
   // Create: Append images and texts
@@ -583,7 +581,7 @@ export const debouncedGetZoomedNodes = debounce(
 
 export const toggleSkeletonView = (params: {
   show: boolean;
-  nodesRoot: RoadmapCustomNodeType[];
+  nodesRoot: RoadmapCHNodeType[];
 }) => {
   const { show, nodesRoot } = params;
   const svg: D3SelectionAllType = d3.select(`.${c.MAP_PAGE_CLASS_SVG}`);
@@ -672,7 +670,7 @@ export const toggleSkeletonView = (params: {
   };
 
   // Loop through all nodes to update their elements
-  nodes.forEach((node: RoadmapCustomNodeType) => {
+  nodes.forEach((node: RoadmapCHNodeType) => {
     const element = d3.select(`#${_ids.getNodeId(node)}`);
 
     // Early return if element is empty or ID is falsy
@@ -693,7 +691,7 @@ export const toggleSkeletonView = (params: {
       secondImage.style("visibility", "hidden");
 
       // Hide all the links
-      links?.forEach((link: RoadmapCustomEdgeType) => {
+      links?.forEach((link: RoadmapCHParentEdgeType) => {
         const linkId = _ids.getLinkId(link);
 
         _utils.toggleLinkVisible(linkId, false);

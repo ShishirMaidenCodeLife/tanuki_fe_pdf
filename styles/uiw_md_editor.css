@@ -10,10 +10,16 @@
 
 .light .cm-line {
   caret-color: var(--color-primary-light) !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .dark .cm-line {
   caret-color: var(--color-primary-dark) !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 /* ============================================= */
@@ -73,6 +79,9 @@
   height: var(--height-uiw-md-editor) !important;
   min-height: var(--height-uiw-md-editor) !important;
   z-index: 1000; /* z-mobile_stepper = 1000 */
+  overflow-x: hidden !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .light .cm-gutterElement,
@@ -150,6 +159,9 @@
 
 .md-editor-content {
   margin-top: 0.3rem;
+  overflow-x: hidden !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .md-editor-toolbar-warp .md-editor-toolbar {
@@ -228,4 +240,77 @@
 .dark .cm-gutterElement,
 .dark .cm-gutter {
   background-color: var(--color-background-dark) !important;
+}
+
+/* ============================================= */
+/* 📝 Word Wrap & Overflow Prevention - SIMPLIFIED */
+/* ============================================= */
+
+/* Main container - prevent horizontal scrolling */
+.main-markdown-editor,
+.markdown-editor-container {
+  overflow-x: hidden !important;
+  width: var(--width-uiw-md-editor) !important;
+  max-width: var(--width-uiw-md-editor) !important;
+}
+
+/* CodeMirror editor - hide horizontal overflow */
+.cm-editor {
+  overflow-x: hidden !important;
+  width: var(--width-uiw-md-editor) !important;
+  max-width: var(--width-uiw-md-editor) !important;
+}
+
+/* CodeMirror content areas - wrap text properly */
+.cm-content,
+.cm-scroller {
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Individual lines - force wrapping with higher specificity */
+.cm-line,
+.cm-editor .cm-line,
+.cm-content .cm-line {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  max-width: var(--width-uiw-md-editor-text) !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Text elements within lines with higher specificity */
+.cm-line span,
+.cm-line > *,
+.cm-editor .cm-line span,
+.cm-editor .cm-line > *,
+.ͼ1k {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================= */
+/* 🔗 Handle Long URLs and Code Blocks */
+/* ============================================= */
+
+/* Force break extremely long words, URLs, and code */
+.cm-line span:has([class*="url"]),
+.cm-line span:has([class*="link"]),
+.cm-line span:has([class*="code"]) {
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Ensure no element can exceed the text width */
+.cm-line * {
+  max-width: var(--width-uiw-md-editor-text) !important;
+  box-sizing: border-box !important;
 }

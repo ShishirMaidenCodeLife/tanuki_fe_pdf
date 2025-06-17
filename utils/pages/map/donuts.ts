@@ -18,7 +18,7 @@ import {
 } from "@/utils/pages/map/utils";
 import { handleTooltipHover } from "@/utils/methods/d3";
 import { wrapText } from "@/utils/methods/text";
-import { RoadmapCustomEdgeType } from "@/types";
+import { RoadmapCHParentEdgeType } from "@/types";
 
 // Default donut chart data
 export const convertToDonut = (names: string[] = []): T.DefaultType => {
@@ -201,7 +201,7 @@ export const drawDonutChart = (params: {
 
       // Variable: Get the root node for the selected donut segment
       const root = nodesRoot?.find(
-        (item: T.RoadmapCustomNodeType) => item?.data?.name === param,
+        (item: T.RoadmapCHNodeType) => item?.data?.name === param,
       );
 
       // Create: Append a group for each donut segment
@@ -213,18 +213,18 @@ export const drawDonutChart = (params: {
 
       if (root) {
         // Clear the highlights from the other donut segments
-        nodesRoot?.map((root: T.RoadmapCustomNodeType) => {
+        nodesRoot?.map((root: T.RoadmapCHNodeType) => {
           if (root?.data?.name !== param) {
             // Variable: Get the nodes and lin\ks for the tree structure
 
-            root.descendants().forEach((node: T.RoadmapCustomNodeType) => {
+            root.descendants().forEach((node: T.RoadmapCHNodeType) => {
               node.isHighlighted = false;
               const nodeId = ids.getNodeId(node);
 
               utils.toggleVisibleAttribute(nodeId, false);
             });
 
-            root.links().forEach((link: RoadmapCustomEdgeType) => {
+            root.links().forEach((link: RoadmapCHParentEdgeType) => {
               const linkId = ids.getLinkId(link);
 
               utils.toggleLinkVisible(linkId, false);
@@ -422,7 +422,7 @@ export function getParentData(element: T.DefaultType) {
   }
 
   // Attempt to retrieve the datum of the parent group, return empty object if not found
-  const parentData = d3.select(parentGroup).datum() as T.RoadmapCustomNodeType;
+  const parentData = d3.select(parentGroup).datum() as T.RoadmapCHNodeType;
 
   // Optional: You can log or perform additional checks here if needed
   // console.log("log", "Parent data retrieved: ", parentData);
@@ -449,7 +449,7 @@ export function getNodeData(element: T.DefaultType) {
   }
 
   // Attempt to retrieve the datum of the parent group, return empty object if not found
-  const nodeData = d3.select(nodeSelector).datum() as T.RoadmapCustomNodeType;
+  const nodeData = d3.select(nodeSelector).datum() as T.RoadmapCHNodeType;
 
   // Optional: You can log or perform additional checks here if needed
   // console.log("log", "Parent data retrieved: ", nodeData);
@@ -459,7 +459,7 @@ export function getNodeData(element: T.DefaultType) {
 // First node or First parent of each donut segment's network
 export const createFirstNode = (
   thisElement: T.DefaultType,
-  quadrantFlags: T.RoadmapCustomNodeType["quadrantFlags"],
+  quadrantFlags: T.RoadmapCHNodeType["quadrantFlags"],
 ) => {
   // Get the parent group of thisElement
   const parentGroup = thisElement.node()?.parentNode;
@@ -488,7 +488,7 @@ export const createFirstNode = (
       "transform",
       (d: unknown) =>
         utils.getFirstParentNodeTransform(
-          d as T.RoadmapCustomNodeType,
+          d as T.RoadmapCHNodeType,
           quadrantFlags,
         )?.transform || "",
     );
@@ -535,10 +535,7 @@ export const createFirstNode = (
     .append("foreignObject")
     .attr("x", -90) // Adjusted horizontal positioning
     .attr("y", 40) // Positioned below the title
-    .attr(
-      "class",
-      (d: T.RoadmapCustomNodeType) => styles.adjustColorClass(d) || "",
-    )
+    .attr("class", (d: T.RoadmapCHNodeType) => styles.adjustColorClass(d) || "")
     .style("fill", "currentColor")
     .attr("width", c.FIRST_NODE_TEXT_MAX_WIDTH - 160)
     .attr("height", c.FIRST_NODE_DESCRIPTION_MAX_HEIGHT)

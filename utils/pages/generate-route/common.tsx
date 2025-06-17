@@ -7,7 +7,6 @@ import { getAiSingleCallBody } from "@/config/api";
 import * as H from "@/hooks";
 import { RoutesFormBuilderType } from "@/types";
 import { formValidation } from "@/utils/constants/validation";
-import { handleFormBuilderTestSubmit } from "@/utils/methods/app";
 
 // AI Routes Search Form
 export const GenerateRoutePageClient = () => {
@@ -19,20 +18,14 @@ export const GenerateRoutePageClient = () => {
     mode: "onChange",
     defaultValues: { routesValue: "" },
   });
-  const { isMdLoading, setMd, setIsMdLoading } = H.useRoadmapStoreHook();
+  const { isMdLoading, setIsMdLoading } = H.useRoadmapStoreHook();
   const singleAiCallMutation = H.useMutationSingleCallHook();
-  const { isNavigating, navigateWithLoader } = H.useNavigationLoaderHook();
+  const { isNavigating } = H.useNavigationLoaderHook();
 
   // Action when the form gets submitted
   const handleFormSubmit = (data: RoutesFormBuilderType) => {
     setIsMdLoading(true);
 
-    if (process.env.stub_mode === "stub") {
-      handleFormBuilderTestSubmit({ setMd, setIsMdLoading });
-      navigateWithLoader("route-templates");
-
-      return;
-    }
     singleAiCallMutation?.mutate(getAiSingleCallBody(data.routesValue));
   };
 

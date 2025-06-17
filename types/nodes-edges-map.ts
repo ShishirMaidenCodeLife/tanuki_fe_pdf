@@ -64,9 +64,9 @@ export type RelatedSkillType = {
   weight: number;
 };
 
-export type D3HierarchyCustomNodeType = {
+export type D3HierarchyCHNodeType = {
   name: string;
-  children?: D3HierarchyCustomNodeType[]; // Recursive structure
+  children?: D3HierarchyCHNodeType[]; // Recursive structure
 };
 
 export type RoadmapRouteNodeDataType = {
@@ -78,7 +78,7 @@ export type RoadmapRouteNodeDataType = {
   children: RoadmapRouteNodeDataType[];
 };
 
-export type CustomCustomNodeType = {
+export type CustomCHNodeType = {
   filterId?: string;
   rx?: number;
   ry?: number;
@@ -91,14 +91,14 @@ export type CustomCustomNodeType = {
   isFirstParent?: boolean;
 };
 
-export interface TextOffsetType extends CustomCustomNodeType {
+export interface TextOffsetType extends CustomCHNodeType {
   width: number;
   height: number;
 }
 
-export interface RoadmapCustomNodeType
+export interface RoadmapCHNodeType
   extends d3.HierarchyNode<RoadmapJsonType>,
-    CustomCustomNodeType {
+    CustomCHNodeType {
   collapsed?: boolean;
   isHighlighted?: boolean;
   parentColor?: string;
@@ -118,8 +118,8 @@ export interface RoadmapCustomNodeType
   // param?: string;
 }
 
-export type RoadmapCustomEdgeType = {
+export type RoadmapCHParentEdgeType = {
   randomColor?: string;
-  source: RoadmapCustomNodeType;
-  target: RoadmapCustomNodeType;
+  source: RoadmapCHNodeType;
+  target: RoadmapCHNodeType;
 };

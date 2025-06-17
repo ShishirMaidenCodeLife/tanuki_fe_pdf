@@ -112,11 +112,13 @@ export const Header: React.FC<HeaderType> = (props) => {
   const isErrorPage = pageLayout === "error";
 
   return (
-    <Navbar className={navbarContainerCss} maxWidth="xl" position="sticky">
+    <>
       <C.CommonBreadcrumbs />
-      <LeftNavbarSection />
-      {!isErrorPage && <RightNavbarSection />}
-      <MobileMenuSection />
-    </Navbar>
+      <Navbar className={navbarContainerCss} maxWidth="xl" position="sticky">
+        <LeftNavbarSection />
+        {!isErrorPage && <RightNavbarSection />}
+        <MobileMenuSection />
+      </Navbar>
+    </>
   );
 };

@@ -13,14 +13,14 @@ export const useRoadmapPrivateStore = create<RoadmapStoreType>((set) => ({
 
   // Dashboard parameters
   dashboardParams: {
-    selectedCategory: "React.js",
+    selectedCategories: ["Cybersecurity", "Design"],
   },
-  setSelectedCategory: (selectedCategory: string) =>
+  setSelectedCategories: (selectedCategories: string[]) =>
     set((state) => ({
       ...state,
       dashboardParams: {
         ...state.dashboardParams,
-        selectedCategory,
+        selectedCategories,
       },
     })),
   setDashboardParams: (dashboardParams: RoadmapStoreType["dashboardParams"]) =>

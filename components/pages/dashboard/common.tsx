@@ -185,7 +185,11 @@ export const MoreTemplatesSection = () => {
   );
 };
 
-export const CategoriesSection = (props: RouteTemplatesApiType) => {
+export const CategoriesSection = (props: {
+  categories?: Array<{ data?: RouteTemplatesApiType }>;
+}) => {
+  const { categories = [] } = props;
+
   return (
     <section
       className={clsx(
@@ -193,7 +197,9 @@ export const CategoriesSection = (props: RouteTemplatesApiType) => {
         "relative flex flex-col gap-4 mt-6",
       )}
     >
-      <C.CategoryCard {...props} />
+      {categories.map((categoryResponse, index) => (
+        <C.CategoryCard key={index} {...categoryResponse?.data} />
+      ))}
     </section>
   );
 };

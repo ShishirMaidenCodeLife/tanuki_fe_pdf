@@ -1,7 +1,7 @@
 // import { DefaultType, NextImageType } from "@/types/global";
 // import { D3SelectionGType, D3SelectionSVGType } from "@/types/d3";
 
-// export type RouteCustomNodeType = {
+// export type RouteCHNodeType = {
 //   // Mandatory properties
 //   id: string;
 //   text: string;
@@ -29,11 +29,11 @@
 //   vx?: number;
 // };
 
-// export type RouteCustomEdgeType = {
+// export type RouteCHParentEdgeType = {
 //   // Mandatory properties
 //   length: number;
-//   source: RouteCustomNodeType;
-//   target: RouteCustomNodeType;
+//   source: RouteCHNodeType;
+//   target: RouteCHNodeType;
 
 //   // Optional properties
 //   from?: string;
@@ -43,12 +43,12 @@
 // };
 
 // export type RouteNodeDataType = {
-//   __data__: RouteCustomNodeType;
+//   __data__: RouteCHNodeType;
 // };
 
 // export type RouteNodeSelectionType = {
-//   _groups: RouteCustomNodeType[][];
-//   _parents: (RouteCustomNodeType | null)[];
+//   _groups: RouteCHNodeType[][];
+//   _parents: (RouteCHNodeType | null)[];
 // };
 
 // export type RouteSvgType = {

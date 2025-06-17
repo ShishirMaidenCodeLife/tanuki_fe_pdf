@@ -11,19 +11,21 @@ import { useCombinedAuthNavHook, useRoadmapStoreHook } from "@/hooks";
 export const useRouteTemplateApiService = (keys: AvailableQueryKeysType) => {
   const { auth } = useCombinedAuthNavHook();
   const {
-    dashboardParams: { selectedCategory },
+    dashboardParams: { selectedCategories },
   } = useRoadmapStoreHook();
   const params = useParams();
 
   // Create common props for the query hooks
-  const commonProps = { auth, selectedCategory, keys, params };
+  const commonProps = { auth, selectedCategories, keys, params };
 
   // Create query hooks for the available queries
   const { useGetByCategory, useGetByUuid } =
     createAvailableQueryHooks(commonProps);
 
   // Apply fallback data to the query results
-  const getByCatResponse = applyFallbackData(useGetByCategory());
+  const getByCatResponse = useGetByCategory().map((result) =>
+    applyFallbackData(result),
+  );
   const getByUuidResponse = applyFallbackData(useGetByUuid());
 
   return {

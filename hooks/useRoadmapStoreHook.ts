@@ -11,7 +11,7 @@ import { INITIAL_SELECTED_ROUTE } from "@/utils/pages/route-templates/view/const
 // All the states within the store
 const selectors: (keyof RoadmapStoreType)[] = [
   "dashboardParams",
-  "setSelectedCategory",
+  "setSelectedCategories",
   "setDashboardParams",
   "isMounted",
   "setIsMounted",
@@ -47,7 +47,7 @@ export const useRoadmapStoreHook = () => {
       storeHook((state: T) => state[selector]),
     ) as [
       T["dashboardParams"],
-      T["setSelectedCategory"],
+      T["setSelectedCategories"],
       T["setDashboardParams"],
       T["isMounted"],
       T["setIsMounted"],
@@ -73,7 +73,7 @@ export const useRoadmapStoreHook = () => {
   // Get the states from the private store
   const [
     dashboardParams1,
-    setSelectedCategory1,
+    setSelectedCategories1,
     setDashboardParams1,
     isMounted1,
     setIsMounted1,
@@ -98,7 +98,7 @@ export const useRoadmapStoreHook = () => {
   // Get the states from the public store
   const [
     dashboardParams2,
-    setSelectedCategory2,
+    setSelectedCategories2,
     setDashboardParams2,
     isMounted2,
     setIsMounted2,
@@ -123,7 +123,7 @@ export const useRoadmapStoreHook = () => {
   // Memoize the derived state based on the 'isUserAuthenticated' value
   const [
     dashboardParams,
-    setSelectedCategory,
+    setSelectedCategories,
     setDashboardParams,
     isMounted,
     setIsMounted,
@@ -147,7 +147,7 @@ export const useRoadmapStoreHook = () => {
     return isUserAuthenticated
       ? [
           dashboardParams1,
-          setSelectedCategory1,
+          setSelectedCategories1,
           setDashboardParams1,
           isMounted1,
           setIsMounted1,
@@ -170,7 +170,7 @@ export const useRoadmapStoreHook = () => {
         ]
       : [
           dashboardParams2,
-          setSelectedCategory2,
+          setSelectedCategories2,
           setDashboardParams2,
           isMounted2,
           setIsMounted2,
@@ -194,7 +194,7 @@ export const useRoadmapStoreHook = () => {
   }, [
     isUserAuthenticated,
     dashboardParams1,
-    setSelectedCategory1,
+    setSelectedCategories1,
     setDashboardParams1,
     dashboardParams2,
     setDashboardParams2,
@@ -256,7 +256,7 @@ export const useRoadmapStoreHook = () => {
 
   return {
     dashboardParams,
-    setSelectedCategory,
+    setSelectedCategories,
     setDashboardParams,
     isMounted,
     setIsMounted,

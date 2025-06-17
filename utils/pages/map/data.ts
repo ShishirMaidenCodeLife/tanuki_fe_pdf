@@ -3,20 +3,20 @@ import { UseQueryResult } from "@tanstack/react-query";
 
 import {
   RoadmapDataType,
-  RoadmapCustomNodeType,
+  RoadmapCHNodeType,
   UseQueryRoadmapHookType,
 } from "@/types";
 import { createMapD3Hierarchy } from "@/utils/methods/d3";
 import { collapseAllDescendants } from "@/utils/pages/map/utils";
-import { RoadmapCustomEdgeType } from "@/types";
+import { RoadmapCHParentEdgeType } from "@/types";
 
 // Extracts nodes, links, or both from a given nodesRoot structure
 export const getNodesAndLinks = (
-  nodesRoot: RoadmapCustomNodeType[],
+  nodesRoot: RoadmapCHNodeType[],
   type?: "nodes" | "links",
 ) => {
-  let nodes: RoadmapCustomNodeType[] = [];
-  let links: RoadmapCustomEdgeType[] = [];
+  let nodes: RoadmapCHNodeType[] = [];
+  let links: RoadmapCHParentEdgeType[] = [];
 
   // Use a standard loop for better performance
   for (let i = 0; i < nodesRoot?.length; i++) {
@@ -71,14 +71,14 @@ export const createRoadmapData = (
     // Return early without executing anything in case there is no roadmapJson
     if (!roadmapJson) return;
 
-    const root: RoadmapCustomNodeType = d3.hierarchy(roadmapJson);
+    const root: RoadmapCHNodeType = d3.hierarchy(roadmapJson);
 
     // Modify the x value of each node in root
     root.each(collapseAllDescendants);
     let x0 = Infinity;
     let x1 = -x0;
 
-    root.each((d: RoadmapCustomNodeType) => {
+    root.each((d: RoadmapCHNodeType) => {
       if (d.x) {
         if (d.x > x1) x1 = d.x;
         if (d.x < x0) x0 = d.x;
@@ -92,11 +92,11 @@ export const createRoadmapData = (
 };
 
 export const updateNodesRoot = (
-  nodesRoot: RoadmapCustomNodeType[],
-  root: RoadmapCustomNodeType,
+  nodesRoot: RoadmapCHNodeType[],
+  root: RoadmapCHNodeType,
 ) => {
   return (
-    nodesRoot?.map((item: RoadmapCustomNodeType) =>
+    nodesRoot?.map((item: RoadmapCHNodeType) =>
       item.data?.uuid === root.data?.uuid ? root : item,
     ) ?? nodesRoot
   );

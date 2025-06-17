@@ -6,8 +6,8 @@ import * as ids from "@/utils/pages/map/ids";
 import {
   D3SelectionAllType,
   DefaultType,
-  RoadmapCustomEdgeType,
-  RoadmapCustomNodeType,
+  RoadmapCHParentEdgeType,
+  RoadmapCHNodeType,
   RoadmapTitleType,
 } from "@/types";
 
@@ -35,7 +35,7 @@ export const adjustBoundaryIndex = (
 };
 
 // Check if a node is at the last depth
-export const checkIfLastDepthNode = (node: RoadmapCustomNodeType): boolean => {
+export const checkIfLastDepthNode = (node: RoadmapCHNodeType): boolean => {
   if (!node) return false;
 
   // A node is at the last depth if it has no children
@@ -44,14 +44,14 @@ export const checkIfLastDepthNode = (node: RoadmapCustomNodeType): boolean => {
 
 // Check if the current node is the first parent
 export const checkIfFirstParentNode = (
-  currentNode: RoadmapCustomNodeType,
+  currentNode: RoadmapCHNodeType,
   activeParentNode: d3.PieArcDatum<RoadmapTitleType>,
 ) => currentNode?.data?.name === activeParentNode?.data?.param;
 
 // Determine if a link is related to a node
 export const isLinkRelatedToNode = (
-  link: RoadmapCustomEdgeType,
-  node: RoadmapCustomNodeType,
+  link: RoadmapCHParentEdgeType,
+  node: RoadmapCHNodeType,
   isOnlyTarget?: boolean,
 ): boolean => {
   if (isOnlyTarget) return link.target === node;
@@ -61,8 +61,8 @@ export const isLinkRelatedToNode = (
 
 // Get the node transform based on the quadrant flags
 export const getFirstParentNodeTransform = (
-  d: RoadmapCustomNodeType,
-  qd: RoadmapCustomNodeType["quadrantFlags"],
+  d: RoadmapCHNodeType,
+  qd: RoadmapCHNodeType["quadrantFlags"],
 ) => {
   // Variable: Destructure the node
   const { x = 0, y = 0 } = d;
@@ -119,8 +119,8 @@ export const toggleLinkVisible = (id: string, show?: boolean) => {
 };
 
 export const isMatchingLink = (
-  link: RoadmapCustomEdgeType,
-  node: RoadmapCustomNodeType,
+  link: RoadmapCHParentEdgeType,
+  node: RoadmapCHNodeType,
 ) =>
   link.source?.data?.uuid === node?.data?.uuid ||
   link.target?.data?.uuid === node?.data?.uuid;
@@ -147,7 +147,7 @@ export function getRelativePositionWithCTM(
 
 export const getZoomedNodes = (
   event: DefaultType,
-  nodesRoot: RoadmapCustomNodeType[],
+  nodesRoot: RoadmapCHNodeType[],
 ) => {
   try {
     // Destructure required properties from tidyPageSvgDetails
@@ -180,7 +180,7 @@ export const getZoomedNodes = (
     }
 
     // Reset visibility for all nodes and links that are not highlighted
-    nodes.forEach((node: RoadmapCustomNodeType) => {
+    nodes.forEach((node: RoadmapCHNodeType) => {
       if (!node.isHighlighted) {
         const nodeId = ids.getNodeId(node);
 
@@ -188,7 +188,7 @@ export const getZoomedNodes = (
       }
     });
 
-    links.forEach((link: RoadmapCustomEdgeType) => {
+    links.forEach((link: RoadmapCHParentEdgeType) => {
       if (!link?.target?.isHighlighted) {
         const linkId = ids.getLinkId(link);
 
@@ -234,7 +234,7 @@ export const getZoomedNodes = (
     const nodePositions = new Map();
 
     // Filter nodes within the zoomed circular area
-    const zoomAreaNodes = nodes.filter((node: RoadmapCustomNodeType) => {
+    const zoomAreaNodes = nodes.filter((node: RoadmapCHNodeType) => {
       const nodeId = ids.getNodeId(node);
       const nodeElement = d3.select(`#${nodeId}`);
 
@@ -256,7 +256,7 @@ export const getZoomedNodes = (
 
           // Make the children visible up to 1 level
           if (node.children && node.children?.length > 0) {
-            node.children.forEach((child: RoadmapCustomNodeType) => {
+            node.children.forEach((child: RoadmapCHNodeType) => {
               const childId = ids.getNodeId(child);
 
               // Make the first child node visible inside children
@@ -264,7 +264,7 @@ export const getZoomedNodes = (
             });
           }
 
-          links.forEach((link: RoadmapCustomEdgeType) => {
+          links.forEach((link: RoadmapCHParentEdgeType) => {
             const linkId = ids.getLinkId(link);
             // prevEdges.push({ linkId, link, node });
             const show =
@@ -275,10 +275,10 @@ export const getZoomedNodes = (
           });
         } else {
           // const allHighlightedNodes = nodes?.filter(
-          //   (node: RoadmapCustomNodeType) => node?.isHighlighted
+          //   (node: RoadmapCHNodeType) => node?.isHighlighted
           // );
           // const allHighlightedLinks = links?.filter(
-          //   (link: RoadmapCustomEdgeType) => link?.target?.isHighlighted
+          //   (link: RoadmapCHParentEdgeType) => link?.target?.isHighlighted
           // );
         }
 
@@ -288,10 +288,10 @@ export const getZoomedNodes = (
       return false;
     });
 
-    zoomAreaNodes.forEach((node: RoadmapCustomNodeType) => {
+    zoomAreaNodes.forEach((node: RoadmapCHNodeType) => {
       // #region Node workings
       // Make the children visible up to 1 level
-      node.children?.forEach((child: RoadmapCustomNodeType) => {
+      node.children?.forEach((child: RoadmapCHNodeType) => {
         const childId = ids.getNodeId(child);
 
         toggleVisibleAttribute(childId, true);
@@ -301,13 +301,13 @@ export const getZoomedNodes = (
       // #region Link workings
       // Get direct links (node as source or target)
       const directLinks = links.filter(
-        (link: RoadmapCustomEdgeType) =>
+        (link: RoadmapCHParentEdgeType) =>
           link.source?.data?.uuid === node?.data?.uuid ||
           link.target?.data?.uuid === node?.data?.uuid,
       );
 
       // Step 2: Collect ancestor links
-      let ancestorLinks: RoadmapCustomEdgeType[] = [];
+      let ancestorLinks: RoadmapCHParentEdgeType[] = [];
       let currentNode = node;
 
       while (currentNode.parent) {
@@ -315,7 +315,7 @@ export const getZoomedNodes = (
 
         toggleVisibleAttribute(ids.getNodeId(parentNode), true);
         const parentLink = links.find(
-          (link: RoadmapCustomEdgeType) =>
+          (link: RoadmapCHParentEdgeType) =>
             (link.source?.data?.uuid === parentNode.data?.uuid &&
               link.target?.data?.uuid === currentNode.data?.uuid) ||
             (link.target?.data?.uuid === parentNode.data?.uuid &&
@@ -330,7 +330,7 @@ export const getZoomedNodes = (
       const allRelatedLinks = [...directLinks, ...ancestorLinks];
 
       // Style the related links
-      allRelatedLinks.forEach((link: RoadmapCustomEdgeType) => {
+      allRelatedLinks.forEach((link: RoadmapCHParentEdgeType) => {
         const linkId = ids.getLinkId(link);
 
         toggleLinkVisible(linkId, true);
@@ -346,7 +346,7 @@ export const getZoomedNodes = (
 };
 
 // Function to recursively collapse all children
-export const collapseAllDescendants = (node: RoadmapCustomNodeType) => {
+export const collapseAllDescendants = (node: RoadmapCHNodeType) => {
   node.collapsed = false;
 
   if (node.children) {

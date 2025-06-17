@@ -67,9 +67,9 @@ export const ThemeSwitch: FC<ThemeSwitchType> = ({ className, classNames }) => {
           <MoonFilledIcon size={28} />
         )}
       </div>
-      {process.env.TENGU_MODE && (
+      {process.env.FE_MODE && (
         <div className="glass-default px-2 py-1 rounded-md text-sm">
-          {process.env.TENGU_MODE}
+          {process.env.FE_MODE}
         </div>
       )}
     </Component>

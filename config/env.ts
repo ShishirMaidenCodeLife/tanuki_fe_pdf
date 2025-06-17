@@ -4,31 +4,60 @@ export const env = {
   // TEST_MODE: "testing",
 
   // NODE_ENVIRONMENT: process.env.NODE_ENV as "development" | "production",
-  TENGU_MODE: process.env.TENGU_MODE,
-  API_TIMEOUT: process.env.API_TIMEOUT,
+  FE_MODE: process.env.FE_MODE,
+  FE_TIMEOUT: process.env.FE_TIMEOUT,
   // #endregion Default & Custom
 
   // #region Images
-  CLOUDINARY_URL: process.env.CLOUDINARY_URL,
-  FIGMA_URL: process.env.FIGMA_URL,
+  FE_CLOUDINARY_URL: process.env.FE_CLOUDINARY_URL,
   // #endregion Images
 
   // #region Main tengu apis
-  TENGU_BASE_URL: process.env.TENGU_BASE_URL,
-  TENGU_BASE_TEST_URL: process.env.TENGU_BASE_TEST_URL,
+  FE_BACKEND_BASE_URL: process.env.FE_BACKEND_BASE_URL,
+  FE_LOCAL_TEST_URL: process.env.FE_LOCAL_TEST_URL,
   // #endregion Main tengu apis
 
   // #region Amplify Cognito
-  AMP_PROJECT_REGION: process.env.AMP_PROJECT_REGION,
-  AMP_COGNITO_REGION: process.env.AMP_COGNITO_REGION,
-  AMP_USER_POOLS_ID: process.env.AMP_USER_POOLS_ID,
-  AMP_USER_POOLS_WEB_CLIENT_ID: process.env.AMP_USER_POOLS_WEB_CLIENT_ID,
-  AMP_APPSYNC_REGION: process.env.AMP_APPSYNC_REGION,
-  AMP_APPSYNC_AUTHENTICATION_TYPE: process.env.AMP_APPSYNC_AUTHENTICATION_TYPE,
+  FE_PROJECT_REGION: process.env.FE_PROJECT_REGION,
+  FE_COGNITO_REGION: process.env.FE_COGNITO_REGION,
+  FE_USER_POOLS_ID: process.env.FE_USER_POOLS_ID,
+  FE_USER_POOLS_WEB_CLIENT_ID: process.env.FE_USER_POOLS_WEB_CLIENT_ID,
+  FE_APPSYNC_REGION: process.env.FE_APPSYNC_REGION,
+  FE_APPSYNC_AUTHENTICATION_TYPE: process.env.FE_APPSYNC_AUTHENTICATION_TYPE,
   // #endregion Amplify Cognito
 };
 
-// Ensure required environment variables are set
-// if (!env.HEROUI_KEY) {
-//   throw new Error("Missing HEROUI_KEY in environment variables.");
-// }
+// Validate required environment variables for production/staging
+if (typeof window === "undefined") {
+  // Only run on server side
+  const feMode = env.FE_MODE;
+  const isProduction = feMode === "production" || feMode === "staging";
+
+  if (isProduction) {
+    const requiredVars = [
+      "FE_USER_POOLS_ID",
+      "FE_USER_POOLS_WEB_CLIENT_ID",
+      "FE_PROJECT_REGION",
+      "FE_COGNITO_REGION",
+      "FE_APPSYNC_REGION",
+    ] as const;
+
+    const missingVars = requiredVars.filter((varName) => !env[varName]);
+
+    if (missingVars.length > 0) {
+      console.error(
+        `❌ Missing required environment variables for ${feMode}:`,
+        missingVars,
+      );
+      console.error(
+        "Please ensure these are configured in your deployment environment",
+      );
+      // In production, we might want to throw an error, but for now just log
+      // throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    } else {
+      console.log(
+        `✅ All required environment variables are present for ${feMode}`,
+      );
+    }
+  }
+}

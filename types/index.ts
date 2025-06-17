@@ -55,7 +55,7 @@ export type {
   D3RpItemCircleType,
   D3RpItemType,
   D3RouteNodeElementType,
-  D3RouteCustomNodeType,
+  D3RouteCHNodeType,
   D3SelectionAllType,
   D3SelectionCircleType,
   D3SelectionDefsType,
@@ -94,24 +94,24 @@ export type { IconSvgProps } from "@/types/images";
 export type {
   BudgetaryScaleType,
   BusinessScaleType,
-  D3HierarchyCustomNodeType,
+  D3HierarchyCHNodeType,
   IndustryType,
   StageOfDevelopmentType,
   TypeOfBusinessType,
   RoadmapJsonType,
   RoadmapDataType,
-  RoadmapCustomNodeType,
-  RoadmapCustomEdgeType,
+  RoadmapCHNodeType,
+  RoadmapCHParentEdgeType,
   RoadmapRouteNodeDataType,
   TextOffsetType,
 } from "@/types/nodes-edges-map";
 
 // nodes-edges-route
 // export type {
-//   RouteCustomEdgeType,
+//   RouteCHParentEdgeType,
 //   RouteNodeDataType,
 //   RouteNodeSelectionType,
-//   RouteCustomNodeType,
+//   RouteCHNodeType,
 //   RouteSvgType,
 // } from "@/types/nodes-edges-route";
 
@@ -128,10 +128,10 @@ export type {
 // react-flow
 export type {
   RFConnectedNodesType,
-  RFCustomEdgeType,
+  RFCHParentEdgeType,
   RFEdgeDataType,
   RFNodeMouseHandler,
-  RFCustomNodeType,
+  RFCHNodeType,
   RFNodeDataType,
   RFNodeIndicesType,
 } from "@/types/react-flow";

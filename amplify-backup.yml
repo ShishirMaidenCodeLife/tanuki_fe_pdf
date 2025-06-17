@@ -1,0 +1,152 @@
+version: 1
+frontend:
+          # 🔧 Environment Detection and Setup
+        - |
+          echo "🔍 Detecting deployment environment..."
+          case "$AWS_BRANCH" in
+            "main")
+              echo "🌟 Production environment detected"
+              ;;
+            "staging")
+              echo "🧪 Staging environment detected"
+              ;;
+            *)
+              echo "❌ Unsupported branch: '$AWS_BRANCH'"
+              echo "💡 Supported branches: 'main' (production), 'staging'"
+              exit 1
+              ;;
+          esac
+          echo "✅ Environment: $FE_MODE (set via Amplify environment variables)"=============================================================
+  # 🌍 AMPLIFY CONFIGURATION
+  # ==============================================================================
+  # All environment variables are configured in Amplify Console Environment Variables:
+  # 
+  # Required secrets:
+  # - FE_USER_POOLS_ID, FE_USER_POOLS_WEB_CLIENT_ID
+  # 
+  # Environment-specific variables:
+  # - FE_BACKEND_BASE_URL, FE_CLOUDINARY_URL, FE_MODE
+  # 
+  # AWS configuration:
+  # - FE_PROJECT_REGION, FE_COGNITO_REGION, FE_APPSYNC_REGION, FE_APPSYNC_AUTHENTICATION_TYPE
+  # 
+  # Testing configuration:
+  # - FE_LOCAL_TEST_URL, FE_TIMEOUT
+  # ==============================================================================
+  
+  phases:
+    preBuild:
+      commands:
+        # 🔧 Environment Detection and Setup
+        - |
+          echo "🔍 Detecting deployment environment..."
+          case "$AWS_BRANCH" in
+            "main")
+              export FE_MODE=production
+              echo "� Production environment detected"
+              ;;
+            "staging")
+              export FE_MODE=staging
+              echo "🧪 Staging environment detected"
+              ;;
+            *)
+              echo "❌ Unsupported branch: '$AWS_BRANCH'"
+              echo "💡 Supported branches: 'main' (production), 'staging'"
+              exit 1
+              ;;
+          esac
+          echo "✅ Environment: $FE_MODE"
+        
+        # 🔐 Environment Variable Validation
+        - |
+          echo "🔐 Validating required environment variables..."
+          
+          REQUIRED_VARS=(
+            "FE_USER_POOLS_ID"
+            "FE_USER_POOLS_WEB_CLIENT_ID"
+            "FE_BACKEND_BASE_URL"
+            "FE_PROJECT_REGION"
+            "FE_COGNITO_REGION"
+            "FE_APPSYNC_REGION"
+            "FE_MODE"
+          )
+          
+          MISSING_VARS=()
+          for var in "${REQUIRED_VARS[@]}"; do
+            if [ -z "${!var}" ]; then
+              MISSING_VARS+=("$var")
+            fi
+          done
+          
+          if [ ${#MISSING_VARS[@]} -ne 0 ]; then
+            echo "❌ Missing required environment variables:"
+            printf '   - %s\n' "${MISSING_VARS[@]}"
+            echo "💡 Configure these in Amplify Console > Environment Variables"
+            exit 1
+          fi
+          
+          echo "✅ All required variables configured"
+        
+        # 📄 Environment Summary
+        - |
+          echo "📄 Environment Configuration Summary:"
+          echo "   Branch: $AWS_BRANCH"
+          echo "   Mode: $FE_MODE"
+          echo "   Region: $FE_PROJECT_REGION"
+          echo "   Backend: ${FE_BACKEND_BASE_URL:0:30}..."
+          echo "   Test URL: $FE_LOCAL_TEST_URL"
+          echo "   Timeout: ${FE_TIMEOUT}ms"
+          echo "   Cloudinary: ${FE_CLOUDINARY_URL:+configured}"
+        
+        # 📦 Dependencies Installation
+        - echo "📦 Installing dependencies..."
+        - npm ci
+
+    build:
+      commands:
+        - echo "🏗️ Building Next.js application for $FE_MODE..."
+        - npm run build
+
+    postBuild:
+      commands:
+        # 🧪 E2E Testing
+        - |
+          set -e
+          echo "🧪 Running E2E tests for $FE_MODE environment..."
+          
+          # Start server in background
+          echo "🚀 Starting server..."
+          npm run start &
+          SERVER_PID=$!
+          
+          # Cleanup function
+          cleanup() {
+            echo "🛑 Stopping server (PID: $SERVER_PID)..."
+            kill $SERVER_PID 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          
+          # Wait for server
+          TEST_URL=$FE_LOCAL_TEST_URL
+          TIMEOUT=$FE_TIMEOUT
+          
+          echo "⏳ Waiting for server at $TEST_URL (timeout: ${TIMEOUT}ms)..."
+          npx wait-on $TEST_URL --timeout $TIMEOUT
+          
+          # Run tests
+          echo "🎯 Running Cypress E2E tests..."
+          npm run test:ci
+          
+          echo "✅ All tests passed successfully!"
+
+  # 📁 Build Artifacts
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+
+  # 💾 Cache Configuration
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*

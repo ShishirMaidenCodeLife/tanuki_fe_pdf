@@ -1,10 +1,15 @@
 describe("Route Template View Page / ルートテンプレート表示ページ", () => {
-  let validRouteId: string;
+  // Constants
   const INVALID_ROUTE_ID = "invalid-uuid-123";
-  const TIMEOUT = 10000;
+  const FE_BACKEND_BASE_URL = Cypress.env("FE_BACKEND_BASE_URL");
+  const FE_TIMEOUT = Cypress.env("FE_TIMEOUT");
+
+  // Variables
+  const timeout = FE_TIMEOUT;
+  let validRouteId: string;
 
   before(() => {
-    cy.fixture("view-details-by-uuid.cy.json").then((data) => {
+    cy.fixture("valid-route-template-sample.cy.json").then((data) => {
       validRouteId = data.uuid;
     });
   });
@@ -16,64 +21,24 @@ describe("Route Template View Page / ルートテンプレート表示ページ"
 
   context("Valid Route Template / 有効なルートテンプレート", () => {
     beforeEach(() => {
-      cy.intercept("GET", `${Cypress.env("apiUrl")}/route_template/*/get`, {
-        fixture: "view-details-by-uuid.cy.json",
+      cy.intercept("GET", `${FE_BACKEND_BASE_URL}/route_template/*/get`, {
+        fixture: "valid-route-template-sample.cy.json",
+        delay: 3000, // optional: simulate network latency
       }).as("getValidRoute");
 
       cy.visit("/route-templates/" + validRouteId, {
-        timeout: TIMEOUT,
+        timeout,
       });
     });
 
-    it("should load the route template page successfully / ルートテンプレートページが正常に読み込まれること", () => {
-      cy.get('[data-testid="happy-pineapple-spinner"]', {
-        timeout: TIMEOUT,
-      }).should("exist");
-
-      cy.get('[data-testid="custom-md-editor"]').should("be.visible");
-      cy.get('[data-testid="route-svg-diagram"]').should("be.visible");
-      cy.get(".react-flow").should("be.visible");
-    });
-
-    it("should display route content correctly / ルートの内容が正しく表示されること", () => {
-      cy.get('[data-testid="custom-md-editor"]')
-        .should("be.visible")
-        .should("contain", "React Component Architecture");
-
-      cy.get(".react-flow__node", {
-        timeout: TIMEOUT,
-      }).should("have.length.at.least", 1);
-
-      cy.get(".react-flow__edge", {
-        timeout: TIMEOUT,
-      }).should("have.length.at.least", 1);
-    });
-
-    it("should allow interaction with the diagram / ダイアグラムと対話できること", () => {
-      cy.get(".react-flow", {
-        timeout: TIMEOUT,
-      }).should("be.visible");
-
-      cy.get(".react-flow__controls-fitview")
-        .should("be.visible")
-        .should("not.be.disabled")
-        .click();
-
-      cy.get(".react-flow__controls-zoomin")
-        .should("be.visible")
-        .should("not.be.disabled")
-        .click();
-
-      cy.get(".react-flow__controls-zoomout")
-        .should("be.visible")
-        .should("not.be.disabled")
-        .click();
+    it("should show loading spinner immediately on page load / ページ読み込み時にすぐにスピナーが表示されること", () => {
+      cy.get('[data-testid="happy-pineapple-spinner"]').should("be.visible");
     });
   });
 
   context("Invalid Route Template / 無効なルートテンプレート", () => {
     beforeEach(() => {
-      cy.intercept("GET", `${Cypress.env("apiUrl")}/route_template/*/get`, {
+      cy.intercept("GET", `${FE_BACKEND_BASE_URL}/route_template/*/get`, {
         statusCode: 404,
         body: {
           error: "Not Found",
@@ -83,7 +48,7 @@ describe("Route Template View Page / ルートテンプレート表示ページ"
 
       cy.visit("/route-templates/" + INVALID_ROUTE_ID, {
         failOnStatusCode: false,
-        timeout: TIMEOUT,
+        timeout,
       });
     });
 

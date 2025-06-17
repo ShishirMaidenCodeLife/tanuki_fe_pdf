@@ -7,7 +7,7 @@ export type AvailableQueryKeysType = AvailableQueryKeyType[];
 
 export interface AvailableQueryType extends Pick<ApiQueryType, "auth"> {
   keys: AvailableQueryKeysType;
-  selectedCategory?: string;
+  selectedCategories?: string[];
   params?: Params;
 }
 
