@@ -1,0 +1,65 @@
+name: GitHub Frontend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0
+
+jobs:
+  deploy:
+    name: Validate, Test, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Determine TENGU_MODE
+        run: |
+          if [[ "$GITHUB_REF" == "refs/tags/v"* ]]; then
+            echo "TENGU_MODE=production" >> $GITHUB_ENV
+          else
+            echo "TENGU_MODE=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger Production Webhook (if applicable)
+        if: env.TENGU_MODE == 'production'
+        run: |
+          echo "✅ Version tag detected — triggering **production** deployment via webhook!"
+          curl -X POST -d "{}" "${{ secrets.PRODUCTION_WEBHOOK_URL }}" -H "Content-Type: application/json"
+
+      - name: Log TENGU_MODE Info
+        run: |
+          if [[ "${{ env.TENGU_MODE }}" == "staging" ]]; then
+            echo "🚧 Push to main branch detected without version tag — handled by **Amplify** for staging preview."
+          else
+            echo "🚀 Production deployment already triggered above via webhook."
+          fi
+
+      - name: Set up Node.js Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies via npm
+        run: npm ci
+
+      - name: Build Next.js Application
+        run: npm run build
+
+      - name: Launch Server for Testing
+        run: |
+          npm run start &  # Start the Next.js app
+          echo $! > server.pid  # Store server process ID
+
+      - name: Wait for Server to Be Ready
+        run: npx wait-on http://localhost:8081
+
+      - name: Execute Cypress Tests Before Deployment
+        run: npm run test:ci
+
+      - name: Terminate Server Process
+        if: always()
+        run: kill $(cat server.pid)

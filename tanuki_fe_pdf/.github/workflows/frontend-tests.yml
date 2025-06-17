@@ -1,0 +1,69 @@
+name: GitHub Frontend CI/CD
+
+on:
+  push:
+    branches:
+      - production   # Triggers on push to production branch
+      - staging      # Triggers on push to staging branch
+      - main         # Triggers on push to main branch
+
+jobs:
+  deploy:
+    name: Validate and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Source Code
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 2: Set Deployment Mode (before installing dependencies)
+      - name: Set Deployment Mode
+        id: deployment
+        run: |
+          DEPLOYMENT_MODE=""
+          case "$GITHUB_REF" in
+            "refs/heads/production") DEPLOYMENT_MODE="production" ;;
+            "refs/heads/staging") DEPLOYMENT_MODE="staging" ;;
+            "refs/heads/main") DEPLOYMENT_MODE="main" ;;
+            *) echo "Invalid branch for deployment." && exit 1 ;;
+          esac
+          echo "🚀 Deployment Mode: $DEPLOYMENT_MODE"
+          echo "DEPLOYMENT_MODE=$DEPLOYMENT_MODE" >> $GITHUB_ENV
+
+      # Step 3: Set up Node.js environment
+      - name: Set up Node.js and Install Dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Step 4: Install Dependencies using npm ci
+      - run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            echo "No package-lock.json found, running npm install instead."
+            npm install
+          fi
+
+      # Step 5: Build the Next.js Application
+      - name: Build Next.js Application
+        run: npm run build
+
+      # Step 6: Launch Server, Wait for Readiness, Run Cypress Tests, and Terminate Server
+      - name: Test and Deploy Application
+        run: |
+          npm run start &  # Start the server in background
+          echo $! > server.pid  # Store server PID
+          
+          # Wait for the server to be ready
+          npx wait-on http://localhost:8081
+          
+          # Run Cypress tests only for staging, production, or main branches
+          if [[ "$DEPLOYMENT_MODE" =~ ^(staging|production|main)$ ]]; then
+            npm run test:ci  # Run Cypress tests if the mode matches
+          fi
+          
+          # Terminate the server process after testing
+          kill $(cat server.pid)
+          echo "✅ Server stopped after tests"

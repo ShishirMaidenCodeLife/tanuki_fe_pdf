@@ -1,0 +1,17 @@
+.glassmorphism-one {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  border: 1px solid transparent;
+  border-image-source: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-image-slice: 1;
+
+  box-shadow: 2px 2px 15px 0px rgba(255, 255, 255, 0.4) inset;
+  backdrop-filter: blur(10px);
+}

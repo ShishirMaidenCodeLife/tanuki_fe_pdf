@@ -1,0 +1,30 @@
+{
+  "uuid": "229bb581-55a9-4524-969f-adac08c1fc8c",
+  "entityId": "public",
+  "entityType": "public",
+  "title": "Test2 React Component Architecture",
+  "content": "# Test 2 React Component Architecture\n\n## Overview\nThis guide covers best practices for structuring React components in large applications.\n\n## Component Types\n- Presentational Components\n- Container Components\n- Higher-Order Components\n- Hooks\n\n## File Structure\n```\nsrc/\n  components/\n    common/\n    features/\n  hooks/\n  utils/\n```",
+  "status": "published",
+  "progress": {
+    "total": 0,
+    "completed": 0
+  },
+  "description": "A comprehensive guide to React component architecture and best practices",
+  "localizedTitles": {},
+  "localizedDescriptions": {
+    "en": "Best practices for React components",
+    "ja": "Reactコンポーネントのベストプラクティス"
+  },
+  "localizedContent": {
+    "en": "# React Component Architecture...",
+    "ja": "# Reactコンポーネントアーキテクチャ..."
+  },
+  "thumbnailPath": "/images/react-thumb.png",
+  "updatedAt": "2025-04-10T09:06:27.924876",
+  "createdAt": "2025-04-10T09:06:27.924885",
+  "deletedAt": null,
+  "updatedBy": "admin",
+  "createdBy": "admin",
+  "deletedBy": null,
+  "categories": ["React.js"]
+}

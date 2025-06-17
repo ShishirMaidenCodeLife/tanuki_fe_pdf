@@ -1,0 +1,55 @@
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "🧠 Determining environment based on AWS_BRANCH..."
+        - |
+          case "$AWS_BRANCH" in
+            "staging") 
+              echo "🧪 STAGING detected"
+              export BUILD_ENV=staging
+              ;;
+            "main") 
+              echo "🟢 MAIN detected"
+              export BUILD_ENV=main
+              ;;
+            *)
+              echo "⚠️ Invalid branch for deployment. Only 'staging' or 'main' branches are allowed."
+              exit 1
+              ;;
+          esac
+        - echo "✅ Environment set to $BUILD_ENV"
+        - npm ci
+
+    build:
+      commands:
+        - echo "⚙️ Running build for $BUILD_ENV"
+        - npm run build
+        - echo "🚀 Build complete"
+
+    postBuild:
+      commands:
+        - echo "🚀 Preparing to run Cypress Tests..."
+        - |
+          if [[ "$BUILD_ENV" =~ ^(staging|main)$ ]]; then
+            echo "🧪 Starting server for Cypress tests..."
+            npm run start &  # Start your server in background
+            echo $! > server.pid  # Save the process ID
+            npx wait-on http://localhost:8081  # Adjust the port if needed
+            echo "🧪 Server is ready! Running Cypress tests..."
+            npm run test:ci  # Run Cypress tests
+            kill $(cat server.pid)  # Stop the server
+            echo "🛑 Server stopped after tests"
+          else
+            echo "🟢 Skipping Cypress tests for unsupported branch."
+          fi
+        - echo "✅ Post-build tasks complete"
+
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+
+  cache:
+    paths:
+      - node_modules/**/*

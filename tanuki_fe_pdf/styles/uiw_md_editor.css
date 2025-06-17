@@ -1,0 +1,231 @@
+@import url("variables.css");
+
+/* ============================================= */
+/* 🌎 Global Color Definitions (Light & Dark Mode) */
+/* ============================================= */
+
+/* ============================================= */
+/* 🌓 Theme-based Colors (Light & Dark Mode) */
+/* ============================================= */
+
+.light .cm-line {
+  caret-color: var(--color-primary-light) !important;
+}
+
+.dark .cm-line {
+  caret-color: var(--color-primary-dark) !important;
+}
+
+/* ============================================= */
+/* 🎯 Selection Highlighting */
+/* ============================================= */
+
+.light .cm-line::selection,
+.light .ͼ1k::selection {
+  background-color: var(--color-primary-light) !important;
+  color: var(--color-gray-light) !important;
+}
+
+.light .cm-line.cm-selected {
+  background-color: red !important;
+}
+
+.dark .cm-line::selection,
+.dark .ͼ1k::selection {
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-gray-light) !important;
+}
+
+/* Highlighting when selected text matches */
+.light .cm-selectionMatch {
+  background-color: var(--color-primary-light) !important;
+  color: var(--color-gray-light) !important;
+}
+
+.dark .cm-selectionMatch {
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-gray-light) !important;
+}
+
+.light .cm-selectionMatch .ͼ1k {
+  background-color: var(--color-primary-dark-100) !important;
+}
+
+.dark .cm-selectionMatch .ͼ1k {
+  background-color: var(--color-primary-light-500) !important;
+}
+
+/* ============================================= */
+/* 🎨 Background Colors & Focus Effects */
+/* ============================================= */
+
+.light .cm-gutters {
+  background-color: var(--color-overlay-light-20) !important;
+}
+
+.dark .cm-gutters {
+  background-color: var(--color-background-dark) !important;
+}
+
+.cm-editor {
+  width: var(--width-uiw-md-editor) !important;
+  max-width: var(--width-uiw-md-editor) !important;
+  height: var(--height-uiw-md-editor) !important;
+  min-height: var(--height-uiw-md-editor) !important;
+  z-index: 1000; /* z-mobile_stepper = 1000 */
+}
+
+.light .cm-gutterElement,
+.light .cm-foldGutter,
+.light .cm-lineNumbers {
+  /* background-color: var(--color-overlay-light-20) !important; */
+  background-color: var(--color-transparent) !important;
+  color: var(--color-gray-dark) !important;
+}
+
+.light .cm-editor {
+  background-color: var(--color-overlay-light-20) !important;
+  color: var(--color-gray-dark) !important;
+}
+
+.dark .cm-gutterElement,
+.dark .cm-foldGutter,
+.dark .cm-lineNumbers {
+  background-color: var(--color-background-dark) !important;
+  color: var(--color-white) !important;
+}
+
+.dark .cm-editor {
+  background-color: var(--color-background-darker) !important;
+  color: var(--color-white) !important;
+}
+
+.light .cm-editor:focus-within {
+  background-color: var(--color-overlay60-light) !important;
+}
+
+.dark .cm-editor:focus-within {
+  background-color: var(--color-overlay60-dark) !important;
+}
+
+/* ============================================= */
+/* 🔡 Text & Icon Colors */
+/* ============================================= */
+
+.light .cm-line .ͼ1k {
+  color: var(--color-gray-dark) !important;
+}
+
+.dark .cm-line .ͼ1k {
+  color: var(--color-gray-light) !important;
+}
+
+.light .ͼ16 .cm-activeLine {
+  background-color: var(--color-primary-light-200) !important;
+}
+
+.dark .ͼ16 .cm-activeLine {
+  background-color: var(--color-primary-dark-1000) !important;
+}
+
+.dark .ͼ16 .cm-activeLine .ͼ1k {
+  color: var(--color-black) !important;
+}
+
+.dark .ͼ16 .cm-activeLine .ͼ1k {
+  color: var(--color-white) !important;
+}
+
+.md-editor {
+  background-color: var(--color-transparent) !important;
+  box-shadow: none !important;
+}
+
+.md-editor-toolbar-warp {
+  display: flex;
+  justify-content: end !important;
+  background-color: var(--color-transparent);
+  border: 0 !important;
+}
+
+.md-editor-content {
+  margin-top: 0.3rem;
+}
+
+.md-editor-toolbar-warp .md-editor-toolbar {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.md-editor-toolbar-warp .md-editor-toolbar button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.light .md-editor-toolbar-warp .md-editor-toolbar button svg {
+  color: var(--color-overlay80-dark);
+}
+
+.dark .md-editor-toolbar-warp .md-editor-toolbar button svg {
+  color: var(--color-overlay80-light);
+}
+
+/* Hover State */
+.light .md-editor-toolbar-warp .md-editor-toolbar button:hover svg {
+  color: var(--color-primary-light) !important;
+}
+
+.dark .md-editor-toolbar-warp .md-editor-toolbar button:hover svg {
+  color: var(--color-primary-dark) !important;
+}
+
+/* Focus State */
+.light .md-editor-toolbar-warp .md-editor-toolbar button:focus svg {
+  color: var(--color-primary-light) !important;
+}
+
+.dark .md-editor-toolbar-warp .md-editor-toolbar button:focus svg {
+  color: var(--color-primary-dark) !important;
+}
+
+/* Active (Clicked) State */
+.light .md-editor-toolbar-warp .md-editor-toolbar button:active svg {
+  color: var(--color-primary-light-700) !important;
+}
+
+.dark .md-editor-toolbar-warp .md-editor-toolbar button:active svg {
+  color: var(--color-primary-dark-300) !important;
+}
+
+/* Toolbar, fold gutter, and icons color */
+.light .ͼ1l,
+.light .cm-foldGutter,
+.light .cm-foldGutter span {
+  color: var(--color-primary-light) !important;
+}
+
+.light .md-editor-toolbar-warp,
+.dark .md-editor-toolbar-warp {
+  border: 0;
+}
+
+.dark .ͼ1l,
+.dark .md-editor-toolbar-warp button,
+.dark .cm-foldGutter,
+.dark .cm-foldGutter span {
+  color: var(--color-primary-dark-400) !important;
+}
+
+/* ============================================= */
+/* 📌 Gutter Styles */
+/* ============================================= */
+
+.light .cm-gutterElement,
+.light .cm-gutter {
+  background-color: var(--color-background-light) !important;
+}
+
+.dark .cm-gutterElement,
+.dark .cm-gutter {
+  background-color: var(--color-background-dark) !important;
+}

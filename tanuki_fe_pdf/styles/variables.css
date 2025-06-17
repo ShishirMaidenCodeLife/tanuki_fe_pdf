@@ -1,0 +1,335 @@
+/* ============================================= */
+/* 🌎 Global Variables */
+/* ============================================= */
+
+:root {
+  /* #region 🔤 Typography */
+  --font-poppins: "Poppins", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+  --font-fredoka: "Fredoka", sans-serif;
+  --font-size-small: 0.7rem;
+  --font-size-base: 1rem;
+  --font-weight: 400;
+  /* #endregion */
+
+  /* #region 🎨 Dimensions */
+  --width-max-width: 1366px;
+  --width-scrollbar-thin: 3px;
+  --width-scrollbar: 5px;
+  --width-scrollbar-thick: 8px;
+  --width-uiw-md-editor: 420px;
+  --height-scrollbar-thin: 3px;
+  --height-scrollbar: 5px;
+  --height-scrollbar-thick: 8px;
+  --height-screen: 100vh;
+  --height-max-height: 100vh;
+  --height-uiw-md-editor: calc(100vh - 4rem - 28px - 0.3rem);
+  /* #endregion */
+
+  /* #region 🎨 Colors */
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Grayscale */
+  --color-gray-light: #f1f1f1;
+  --color-gray-dark: #333;
+
+  /* Default */
+  --color-default-light-50: #f9fafb;
+  --color-default-light-100: #f3f4f6;
+  --color-default-light-200: #e5e7eb;
+  --color-default-light-300: #d1d5db;
+  --color-default-light-400: #9ca3af;
+  --color-default-light-500: #6b7280;
+  --color-default-light-600: #4b5563;
+  --color-default-light-700: #374151;
+  --color-default-light-800: #1f2937;
+  --color-default-light-900: #111827;
+  --color-default-light-1000: #0a0f1a;
+
+  --color-default-dark-50: #121212;
+  --color-default-dark-100: #1a1a1a;
+  --color-default-dark-200: #232323;
+  --color-default-dark-300: #2c2c2c;
+  --color-default-dark-400: #363636;
+  --color-default-dark-500: #404040;
+  --color-default-dark-600: #4a4a4a;
+  --color-default-dark-700: #545454;
+  --color-default-dark-800: #5e5e5e;
+  --color-default-dark-900: #686868;
+  --color-default-dark-1000: #727272;
+
+  /* Primary */
+  --color-primary-light-50: #eff6ff;
+  --color-primary-light-100: #dbeafe;
+  --color-primary-light-200: #bfdbfe;
+  --color-primary-light-300: #93c5fd;
+  --color-primary-light-400: #60a5fa;
+  --color-primary-light-500: #3b82f6;
+  --color-primary-light-600: #2563eb;
+  --color-primary-light-700: #1d4ed8;
+  --color-primary-light-800: #1e40af;
+  --color-primary-light-900: #1e3a8a;
+  --color-primary-light-1000: #172554;
+
+  --color-primary-dark-50: #e0e7ff;
+  --color-primary-dark-100: #c7d2fe;
+  --color-primary-dark-200: #a5b4fc;
+  --color-primary-dark-300: #818cf8;
+  --color-primary-dark-400: #6366f1;
+  --color-primary-dark-500: #4f46e5;
+  --color-primary-dark-600: #4338ca;
+  --color-primary-dark-700: #3730a3;
+  --color-primary-dark-800: #312e81;
+  --color-primary-dark-900: #1e1b4b;
+  --color-primary-dark-1000: #111032;
+
+  /* Secondary */
+  --color-secondary-light-50: #faf5ff;
+  --color-secondary-light-100: #f3e8ff;
+  --color-secondary-light-200: #e9d5ff;
+  --color-secondary-light-300: #d8b4fe;
+  --color-secondary-light-400: #c084fc;
+  --color-secondary-light-500: #a855f7;
+  --color-secondary-light-600: #9333ea;
+  --color-secondary-light-700: #7e22ce;
+  --color-secondary-light-800: #6b21a8;
+  --color-secondary-light-900: #581c87;
+  --color-secondary-light-1000: #3b0764;
+
+  --color-secondary-dark-50: #f4f1ff;
+  --color-secondary-dark-100: #e9e1ff;
+  --color-secondary-dark-200: #d5bfff;
+  --color-secondary-dark-300: #b593f5;
+  --color-secondary-dark-400: #9167eb;
+  --color-secondary-dark-500: #7042d7;
+  --color-secondary-dark-600: #5a34b2;
+  --color-secondary-dark-700: #48288e;
+  --color-secondary-dark-800: #3a1e71;
+  --color-secondary-dark-900: #2e1659;
+  --color-secondary-dark-1000: #221041;
+
+  /* Success */
+  --color-success-light-50: #ecfdf5;
+  --color-success-light-100: #d1fae5;
+  --color-success-light-200: #a7f3d0;
+  --color-success-light-300: #6ee7b7;
+  --color-success-light-400: #34d399;
+  --color-success-light-500: #10b981;
+  --color-success-light-600: #059669;
+  --color-success-light-700: #047857;
+  --color-success-light-800: #065f46;
+  --color-success-light-900: #064e3b;
+  --color-success-light-1000: #022c22;
+
+  --color-success-dark-50: #dcfce7;
+  --color-success-dark-100: #bbf7d0;
+  --color-success-dark-200: #86efac;
+  --color-success-dark-300: #4ade80;
+  --color-success-dark-400: #22c55e;
+  --color-success-dark-500: #16a34a;
+  --color-success-dark-600: #15803d;
+  --color-success-dark-700: #166534;
+  --color-success-dark-800: #14532d;
+  --color-success-dark-900: #123524;
+  --color-success-dark-1000: #0d291b;
+
+  /* Warning */
+  --color-warning-light-50: #fffbeb;
+  --color-warning-light-100: #fef3c7;
+  --color-warning-light-200: #fde68a;
+  --color-warning-light-300: #fcd34d;
+  --color-warning-light-400: #fbbf24;
+  --color-warning-light-500: #f59e0b;
+  --color-warning-light-600: #d97706;
+  --color-warning-light-700: #b45309;
+  --color-warning-light-800: #92400e;
+  --color-warning-light-900: #78350f;
+  --color-warning-light-1000: #5c2d0c;
+
+  --color-warning-dark-50: #fef9c3;
+  --color-warning-dark-100: #fdf08d;
+  --color-warning-dark-200: #fbda48;
+  --color-warning-dark-300: #f7c008;
+  --color-warning-dark-400: #e0a000;
+  --color-warning-dark-500: #b97d00;
+  --color-warning-dark-600: #956500;
+  --color-warning-dark-700: #745100;
+  --color-warning-dark-800: #573e00;
+  --color-warning-dark-900: #3d2b00;
+  --color-warning-dark-1000: #2a1e00;
+
+  /* Danger */
+  --color-danger-light-50: #fef2f2;
+  --color-danger-light-100: #fee2e2;
+  --color-danger-light-200: #fecaca;
+  --color-danger-light-300: #fca5a5;
+  --color-danger-light-400: #f87171;
+  --color-danger-light-500: #ef4444;
+  --color-danger-light-600: #dc2626;
+  --color-danger-light-700: #b91c1c;
+  --color-danger-light-800: #991b1b;
+  --color-danger-light-900: #7f1d1d;
+  --color-danger-light-1000: #651515;
+
+  --color-danger-dark-50: #ffe5e5;
+  --color-danger-dark-100: #ffbfbf;
+  --color-danger-dark-200: #ff8a8a;
+  --color-danger-dark-300: #ff5555;
+  --color-danger-dark-400: #ff2222;
+  --color-danger-dark-500: #e60000;
+  --color-danger-dark-600: #cc0000;
+  --color-danger-dark-700: #a80000;
+  --color-danger-dark-800: #850000;
+  --color-danger-dark-900: #660000;
+  --color-danger-dark-1000: #4a0000;
+
+  /* Primary & Secondary */
+  --color-primary-light-50: #e0f7f4;
+  --color-primary-light-100: #b3ece2;
+  --color-primary-light-200: #86e0d0;
+  --color-primary-light-300: #5ad4be;
+  --color-primary-light-400: #0ab69b;
+  --color-primary-light-500: #099f88;
+  --color-primary-light-600: #088873;
+  --color-primary-light-700: #06715e;
+  --color-primary-light-800: #055a4a;
+  --color-primary-light-900: #044435;
+  --color-primary-light-1000: #033928;
+  --color-primary-light: #099f88;
+  --color-secondary-light: #b0b0b0;
+
+  --color-primary-dark-50: #f7e0a2;
+  --color-primary-dark-100: #f0c577;
+  --color-primary-dark-200: #e6a84d;
+  --color-primary-dark-300: #d98823;
+  --color-primary-dark-400: #d27a14;
+  --color-primary-dark-500: #c16912;
+  --color-primary-dark-600: #a75f10;
+  --color-primary-dark-700: #8f4e0f;
+  --color-primary-dark-800: #7a450d;
+  --color-primary-dark-900: #6b3a0b;
+  --color-primary-dark-1000: #5e3309;
+  --color-primary-dark: #c16912;
+  --color-secondary-dark: #808080;
+
+  /* Backgrounds */
+  --color-default-background-light: #ffffff;
+  --color-default-background-dark: #000000;
+  --color-background-light: #ffffff;
+  --color-background-dark: #1a202c;
+  --color-background-darker: rgba(0, 0, 0, 0.3);
+
+  /* Foreground */
+  --color-foreground-light: #000000;
+  --color-foreground-dark: #ffffff;
+  --color-text-color-light: #333;
+  --color-text-color-dark: #f1f1f1;
+
+  /* Highlight Colors */
+  --color-highlight-light: #0ab69b;
+  --color-highlight-dark: #d27a14;
+  --color-highlight-theme-light: #e0f7f4;
+  --color-highlight-theme-dark: #f7e0a2;
+
+  --color-primary-light-50-opac40: rgba(224, 247, 244, 0.4);
+  --color-primary-dark-50-opac40: rgba(247, 224, 162, 0.4);
+
+  --color-highlight-light-opac40: rgba(10, 182, 155, 0.4);
+  --color-highlight-dark-opac40: rgba(210, 122, 20, 0.4);
+
+  --color-highlight-hover-light: #099f88;
+  --color-highlight-hover-dark: #c16912;
+
+  --color-highlight-theme-light: #e0f7f4;
+  --color-highlight-theme-dark: #f7e0a2;
+
+  /* Skeleton & Stroke */
+  --color-skeleton-light: #f3f3f3;
+  --color-skeleton-dark: #1e1e1e;
+
+  --color-stroke-light: #cccccc;
+  --color-stroke-dark: #666666;
+
+  --color-stroke-parent-node-light: #cccccc;
+  --color-stroke-parent-node-dark: #ededed;
+
+  /* Tooltip & Overlays */
+  --color-tooltip-light: #1a202cb3;
+  --color-tooltip-dark: #ffffffb3;
+
+  --color-overlay-light: rgba(255, 255, 255, 0.4);
+  --color-overlay-dark: rgba(0, 0, 0, 0.4);
+
+  --color-overlay-light-20: rgba(255, 255, 255, 0.2);
+  --color-overlay-light-50: rgba(255, 255, 255, 0.5);
+  --color-overlay-dark-75: rgba(0, 0, 0, 0.75);
+  --color-overlay-danger-20: rgba(230, 57, 70, 0.2);
+
+  --color-overlay20-light: rgba(255, 255, 255, 0.2);
+  --color-overlay20-dark: rgba(0, 0, 0, 0.2);
+
+  --color-overlay30-light: rgba(255, 255, 255, 0.3);
+  --color-overlay30-dark: rgba(0, 0, 0, 0.3);
+
+  --color-overlay40-light: rgba(255, 255, 255, 0.4);
+  --color-overlay40-dark: rgba(0, 0, 0, 0.4);
+
+  --color-overlay50-light: rgba(255, 255, 255, 0.5);
+  --color-overlay50-dark: rgba(0, 0, 0, 0.5);
+
+  --color-overlay60-light: rgba(255, 255, 255, 0.6);
+  --color-overlay60-dark: rgba(0, 0, 0, 0.6);
+
+  --color-overlay70-light: rgba(255, 255, 255, 0.7);
+  --color-overlay70-dark: rgba(0, 0, 0, 0.7);
+
+  --color-overlay80-light: rgba(255, 255, 255, 0.8);
+  --color-overlay80-dark: rgba(0, 0, 0, 0.8);
+
+  /* ============================================= */
+  /* 🌈 Color Palette for Alerts & Statuses */
+  /* ============================================= */
+
+  /* Success */
+  --color-success: #28a745; /* Green for success */
+  --color-success-hover: #218838;
+  --color-success-active: #1e7e34;
+
+  /* Warning */
+  --color-warning: #f39c12; /* Yellow/orange for warnings */
+  --color-warning-hover: #e67e22;
+  --color-warning-active: #d35400;
+
+  /* Info */
+  --color-info: #17a2b8; /* Blue for informational messages */
+  --color-info-hover: #138496;
+  --color-info-active: #0c7a8f;
+
+  /* Alerts & Danger */
+  --color-danger: #e63946;
+  --color-danger-hover: #d90429;
+  --color-danger-active: #9b2226;
+
+  /* Misc */
+  --color-transparent: transparent;
+  /* #endregion */
+
+  /* #region 🎚️ Scrollbar Styling */
+  --radius-scrollbar: 8px;
+  /* #endregion */
+
+  /* #region 🔥 Toast Notifications */
+  --toast-z-index: 99999;
+  /* #endregion */
+
+  /* #region 🛑 Tooltip Settings */
+  --color-tooltip: #fff;
+  --tooltip-font-size: 0.75rem;
+  /* #endregion */
+
+  /* #region Display Route Page */
+  --grandparent-edge-mix-blend-light: screen;
+  --grandparent-edge-mix-blend-dark: lighten;
+  /* #endregion Display Route Page */
+}

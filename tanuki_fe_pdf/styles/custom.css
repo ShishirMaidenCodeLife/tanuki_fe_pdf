@@ -1,0 +1,19 @@
+@import url("variables.css");
+
+/* .banner-image-container:hover .image-background,
+.banner-description:hover ~ .image-background {
+  transform: scale(1.05);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+} */
+
+/* #region Display Route Page */
+.light .grandparent-edge-mix-blend {
+  mix-blend-mode: var(--grandparent-edge-mix-blend-light);
+  stroke-width: 80px;
+}
+
+.dark .grandparent-edge-mix-blend {
+  mix-blend-mode: var(--grandparent-edge-mix-blend-dark);
+  stroke-width: 80px;
+}
+/* #endregion Display Route Page */

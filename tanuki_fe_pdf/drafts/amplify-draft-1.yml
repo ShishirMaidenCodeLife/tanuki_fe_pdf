@@ -1,0 +1,46 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - 'echo "AWS_COMMIT_REF is = $AWS_COMMIT_REF"'
+        - 'echo "AWS_BRANCH is = $AWS_BRANCH"'
+        - 'echo "🚀 Starting pre-build phase - Setting environment variables..."'
+        - |
+          if [[ "$AWS_COMMIT_REF" == refs/tags/v* ]]; then
+            echo "🌟 **Production Deployment Detected!** 🚀"
+            export TENGU_MODE=production
+            echo "TENGU_MODE=$TENGU_MODE - Setting up for **Production**... 🌍"
+            echo "TENGU_MODE=$TENGU_MODE" >> .env.production
+          elif [ "$AWS_BRANCH" == "main" ]; then
+            echo "🎉 **Staging Deployment Detected!** Preparing for a preview! 🚧"
+            export TENGU_MODE=staging
+            echo "TENGU_MODE=$TENGU_MODE - Setting up for **Staging**... 🛠️"
+            echo "TENGU_MODE=$TENGU_MODE" >> .env.staging
+          fi
+        - 'echo "Installing dependencies... 🌱"'
+        - npm install
+
+    build:
+      commands:
+        - 'echo "🔨 Starting build phase - Building Next.js application..."'
+        - npm run build
+
+    postBuild:
+      commands:
+        - 'echo "✅ Build complete. Post-build steps can go here."'
+
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+
+  cache:
+    paths:
+      - .next/cache/**/*
+      - node_modules/**/*
+
+  # For AWS Amplify, use the proper environment variables format
+  env:
+    variables:
+      TENGU_MODE: ${TENGU_MODE}

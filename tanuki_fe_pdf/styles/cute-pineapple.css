@@ -1,0 +1,282 @@
+:root {
+  /* Scale Factor */
+  --scale-factor: 0.25;
+
+  /* Dimensions */
+  --pineapple-height: 180px;
+  --pineapple-width: 140px;
+  --leaf-height: 70px;
+  --leaf-width: 70px;
+  --hand-height: 80px;
+  --hand-width: 32px;
+  --leg-height: 80px;
+  --leg-width: 32px;
+  --eye-size: 24px;
+  --mouth-height: 20px;
+  --mouth-width: 35px;
+  --shadow-height: 30px;
+  --shadow-width: 160px;
+
+  /* Positions */
+  --container-height: 350px;
+  --container-width: 350px;
+  --pineapple-top: 100px;
+  --pineapple-left: 0;
+  --leaf-top: -65px;
+  --eye-top: 70px;
+  --mouth-top: 105px;
+  --shadow-top: 290px;
+
+  /* Colors */
+  --pineapple-color: #ffaa00;
+  --leaf-color: #498725;
+  --leaf-secondary-color: #3f6b15;
+  --eye-color: #1e1e1e;
+  --mouth-color: #1e1e1e;
+
+  /* Animations */
+  --jump-duration: 0.5s;
+  --jump-infinite: infinite;
+  --hand-animation-duration: 0.5s;
+  --leaf-animation-duration: 0.5s;
+  --legs-animation-duration: 0.6s;
+  --blink-duration: 1s;
+  --shadow-animation-duration: 0.5s;
+}
+
+.happy-pineapple-container {
+  height: calc(var(--container-height) * var(--scale-factor));
+  width: calc(var(--container-width) * var(--scale-factor));
+  position: absolute;
+  transform: translate(-50%, -85%);
+  top: 50%;
+  left: 50%;
+}
+
+.happy-pineapple-container .pineapple {
+  background-color: var(--pineapple-color);
+  height: calc(var(--pineapple-height) * var(--scale-factor));
+  width: calc(var(--pineapple-width) * var(--scale-factor));
+  border-radius: 65px;
+  position: absolute;
+  top: calc(var(--pineapple-top) * var(--scale-factor));
+  left: var(--pineapple-left);
+  right: 0;
+  margin: auto;
+  background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent calc(40px * var(--scale-factor)),
+      #ff9700 calc(40px * var(--scale-factor)),
+      #ff9700 calc(52px * var(--scale-factor))
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent calc(40px * var(--scale-factor)),
+      #ff9700 calc(40px * var(--scale-factor)),
+      #ff9700 calc(52px * var(--scale-factor))
+    );
+  background-size: 200% 200%;
+  background-position: 0 calc(17px * var(--scale-factor));
+  animation: jump var(--jump-duration) var(--jump-infinite);
+}
+
+.happy-pineapple-container .pineapple:before,
+.happy-pineapple-container .pineapple:after {
+  position: absolute;
+  content: "";
+  height: calc(var(--hand-height) * var(--scale-factor));
+  width: calc(var(--hand-width) * var(--scale-factor));
+  background-color: var(--pineapple-color);
+  top: calc(25px * var(--scale-factor));
+  z-index: -1;
+  transform-origin: bottom;
+  border-radius: 25px;
+}
+
+.happy-pineapple-container .pineapple:before {
+  left: calc(10px * var(--scale-factor));
+  transform: rotate(-50deg);
+  animation: hand-l var(--hand-animation-duration) var(--jump-infinite);
+}
+
+.happy-pineapple-container .pineapple:after {
+  right: calc(10px * var(--scale-factor));
+  transform: rotate(50deg);
+  animation: hand-r var(--hand-animation-duration) var(--jump-infinite);
+}
+
+@keyframes hand-l {
+  50% {
+    transform: rotate(calc(-42deg * var(--scale-factor)));
+  }
+}
+
+@keyframes hand-r {
+  50% {
+    transform: rotate(calc(42deg * var(--scale-factor)));
+  }
+}
+
+.happy-pineapple-container .leaf {
+  background-color: var(--leaf-color);
+  height: calc(var(--leaf-height) * var(--scale-factor));
+  width: calc(var(--leaf-width) * var(--scale-factor));
+  border-radius: 70px 0;
+  transform: rotate(135deg);
+  position: absolute;
+  top: calc(var(--leaf-top) * var(--scale-factor));
+  z-index: -1;
+  margin: auto;
+  left: 0;
+  right: 0;
+  animation: leaves var(--leaf-animation-duration) var(--jump-infinite);
+}
+
+@keyframes leaves {
+  50% {
+    transform: rotate(135deg)
+      translate(
+        calc(6px * var(--scale-factor)),
+        calc(-6px * var(--scale-factor))
+      );
+  }
+}
+
+.happy-pineapple-container .leaf:before,
+.happy-pineapple-container .leaf:after {
+  position: absolute;
+  content: "";
+  background-color: var(--leaf-secondary-color);
+  height: calc(var(--leaf-height) * var(--scale-factor));
+  width: calc(var(--leaf-width) * var(--scale-factor));
+  border-radius: 70px 0;
+  transform-origin: right;
+  top: calc(-5px * var(--scale-factor));
+}
+
+.happy-pineapple-container .leaf:before {
+  transform: rotate(calc(40deg * var(--scale-factor)));
+  right: calc(20px * var(--scale-factor));
+  animation: leaf-right var(--leaf-animation-duration) var(--jump-infinite);
+}
+
+.happy-pineapple-container .leaf:after {
+  transform: rotate(calc(-40deg * var(--scale-factor)));
+  left: calc(20px * var(--scale-factor));
+  animation: leaf-left var(--leaf-animation-duration) var(--jump-infinite);
+}
+
+@keyframes leaf-right {
+  50% {
+    transform: rotate(calc(32deg * var(--scale-factor)));
+  }
+}
+
+@keyframes leaf-left {
+  50% {
+    transform: rotate(calc(-32deg * var(--scale-factor)));
+  }
+}
+
+.happy-pineapple-container .leg-left,
+.happy-pineapple-container .leg-right {
+  height: calc(var(--leg-height) * var(--scale-factor));
+  width: calc(var(--leg-width) * var(--scale-factor));
+  background-color: var(--pineapple-color);
+  border-radius: 25px;
+  position: absolute;
+  top: calc(130px * var(--scale-factor));
+  z-index: -1;
+}
+
+.happy-pineapple-container .leg-left {
+  left: calc(22px * var(--scale-factor));
+  animation: legs var(--legs-animation-duration) var(--jump-infinite);
+}
+
+.happy-pineapple-container .leg-right {
+  right: calc(22px * var(--scale-factor));
+  animation: legs var(--legs-animation-duration) var(--jump-infinite);
+}
+
+@keyframes legs {
+  50% {
+    transform: translateY(calc(-15px * var(--scale-factor)));
+  }
+}
+
+.happy-pineapple-container .eye-left,
+.happy-pineapple-container .eye-right {
+  background-color: var(--eye-color);
+  height: calc(var(--eye-size) * var(--scale-factor));
+  width: calc(var(--eye-size) * var(--scale-factor));
+  border-radius: 50%;
+  position: absolute;
+  top: calc(var(--eye-top) * var(--scale-factor));
+  animation: blink var(--blink-duration) var(--jump-infinite);
+}
+
+.happy-pineapple-container .eye-left {
+  left: calc(32px * var(--scale-factor));
+}
+
+.happy-pineapple-container .eye-right {
+  right: calc(32px * var(--scale-factor));
+}
+
+@keyframes blink {
+  20% {
+    transform: scaleY(0.3);
+  }
+  25% {
+    transform: scaleY(1);
+  }
+}
+
+.happy-pineapple-container .mouth {
+  height: calc(var(--mouth-height) * var(--scale-factor));
+  width: calc(var(--mouth-width) * var(--scale-factor));
+  background-color: var(--mouth-color);
+  border-radius: 0 0 35px 35px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: calc(var(--mouth-top) * var(--scale-factor));
+}
+
+@keyframes jump {
+  50% {
+    top: calc(95px * var(--scale-factor));
+  }
+}
+
+.happy-pineapple-container .shadow {
+  height: calc(var(--shadow-height) * var(--scale-factor));
+  width: calc(var(--shadow-width) * var(--scale-factor));
+  background-color: rgba(30, 30, 30, 0.05);
+  border-radius: 50%;
+  position: absolute;
+  top: calc(var(--shadow-top) * var(--scale-factor));
+  z-index: -2;
+  margin: auto;
+  left: 0;
+  right: 0;
+  animation: shadow var(--shadow-animation-duration) var(--jump-infinite);
+}
+
+.light .happy-pineapple-container .shadow {
+  background-color: rgba(30, 30, 30, 0.05);
+}
+
+.dark .happy-pineapple-container .shadow {
+  background-color: rgba(225, 225, 225, 0.05);
+}
+
+@keyframes shadow {
+  50% {
+    transform: scaleX(0.85);
+  }
+}

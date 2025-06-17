@@ -1,0 +1,65 @@
+{
+  "category": "Backend",
+  "routes": [
+    {
+      "content": "# Express with TypeScript\n\n## Prerequisites\n- Node.js v14+\n- npm or yarn\n\n## Setup Steps\n1. Initialize project: `npm init -y`\n2. Install dependencies: `npm install express typescript ts-node @types/express`\n3. Create tsconfig.json\n4. Create src directory and app.ts\n\n## Sample Code\n```typescript\nimport express from 'express';\nconst app = express();\napp.get('/', (req, res) =\u003E res.send('Hello TypeScript!'));\napp.listen(3000, () =\u003E console.log('Server running'));\n```",
+      "entityType": "public",
+      "entityId": "public",
+      "status": "published",
+      "localizedNames": {
+        "en": "Express with TypeScript",
+        "ja": "TypeScriptでExpress"
+      },
+      "createdAt": "2025-04-10T09:06:27.924896",
+      "updatedBy": "admin",
+      "createdBy": "admin",
+      "localizedDescriptions": {
+        "en": "Setup Express with TypeScript",
+        "ja": "TypeScriptでExpressを設定する"
+      },
+      "updatedAt": "2025-04-10T09:06:27.924895",
+      "thumbnailPath": "/images/express-thumb.png",
+      "progress": {
+        "total": 4,
+        "completed": 0
+      },
+      "uuid": "9ccd4fa5-47a7-45c1-b956-a499d54f0b1f",
+      "localizedContent": {
+        "en": "# Express with TypeScript...",
+        "ja": "# TypeScriptでExpress..."
+      },
+      "description": "Step-by-step guide to setting up an Express.js server with TypeScript",
+      "title": "Setting Up Express with TypeScript"
+    },
+    {
+      "content": "# Express with TypeScript\n\n## Prerequisites\n- Node.js v14+\n- npm or yarn\n\n## Setup Steps\n1. Initialize project: `npm init -y`\n2. Install dependencies: `npm install express typescript ts-node @types/express`\n3. Create tsconfig.json\n4. Create src directory and app.ts\n\n## Sample Code\n```typescript\nimport express from 'express';\nconst app = express();\napp.get('/', (req, res) =\u003E res.send('Hello TypeScript!'));\napp.listen(3000, () =\u003E console.log('Server running'));\n```",
+      "entityType": "public",
+      "entityId": "public",
+      "status": "published",
+      "localizedNames": {
+        "en": "Express with TypeScript",
+        "ja": "TypeScriptでExpress"
+      },
+      "createdAt": "2025-03-27T09:47:28.304706",
+      "updatedBy": "admin",
+      "createdBy": "admin",
+      "localizedDescriptions": {
+        "en": "Setup Express with TypeScript",
+        "ja": "TypeScriptでExpressを設定する"
+      },
+      "updatedAt": "2025-03-27T09:47:28.304704",
+      "thumbnailPath": "/images/express-thumb.png",
+      "progress": {
+        "total": 4,
+        "completed": 0
+      },
+      "uuid": "c60780c2-fe5d-4ee9-9c2b-0518276fe82c",
+      "localizedContent": {
+        "en": "# Express with TypeScript...",
+        "ja": "# TypeScriptでExpress..."
+      },
+      "description": "Step-by-step guide to setting up an Express.js server with TypeScript",
+      "title": "Setting Up Express with TypeScript"
+    }
+  ]
+}

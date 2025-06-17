@@ -1,0 +1,310 @@
+/* ========================================
+   General Links
+======================================== */
+._apply_link {
+  @apply hover:text-highlight;
+}
+
+._apply_link_medium {
+  @apply _apply_link font-medium;
+}
+
+._apply_form_link {
+  @apply text-highlight hover:text-highlight-hover font-medium hover:underline transition-transform duration-100;
+}
+
+.apply_normal_next_link {
+  @apply text-textColor hover:underline transition-transform duration-300 ease-soft-spring font-normal;
+}
+
+._apply_active_link {
+  @apply text-blue-500;
+}
+
+/* ========================================
+   Margins & Paddings
+======================================== */
+._apply_common_left_margin {
+  @apply ml-4 sm:ml-8;
+}
+
+._apply_common_right_margin {
+  @apply mr-4 sm:mr-8;
+}
+
+._apply_common_margin {
+  @apply mx-4 sm:mx-8;
+}
+
+._apply_common_left_padding {
+  @apply pl-4 sm:pl-8;
+}
+
+._apply_common_right_padding {
+  @apply pr-4 sm:pr-8;
+}
+
+._apply_common_padding {
+  @apply px-4 sm:px-8;
+}
+
+._apply_common_padding_y {
+  @apply py-4 sm:py-8;
+}
+
+/* ========================================
+   Inputs
+======================================== */
+._apply_input {
+  @apply w-[calc(28rem-4.4rem)] min-h-[4.2rem];
+}
+
+._apply_input_width {
+  @apply min-w-[240px];
+}
+
+/* ========================================
+   Dimensions
+======================================== */
+/* ._apply_width,
+._apply_max_width {
+  @apply w-full max-w-[2011px];
+} */
+
+._apply_logo_max_width {
+  @apply max-w-[220px];
+}
+
+._apply_container_width {
+  @apply !max-w-[1366px] mx-auto;
+}
+
+._apply_container_width_form {
+  @apply grid place-items-center gap-6;
+}
+
+._apply_container_width_form_btn {
+  @apply w-full flex !flex-col lg:!flex-row gap-3 lg:gap-0 lg:justify-between items-center pt-2 text-sm;
+}
+
+._apply_container_width_form_btn_center {
+  @apply w-full flex !flex-col lg:!flex-row gap-3 lg:gap-0 justify-center items-center pt-2 text-sm;
+}
+
+.apply_height {
+  @apply min-h-[calc(100vh-4rem)];
+}
+
+.apply_height_button {
+  @apply h-[36px];
+}
+
+._apply_uiw_md_editor_width {
+  @apply !w-[420px] max-w-[420px] z-plus_10;
+}
+
+._apply_navbar_height {
+  @apply h-[4rem];
+}
+
+._apply_form_height {
+  @apply max-h-[400px] overflow-y-auto;
+}
+
+._apply_max_height {
+  @apply min-h-screen;
+}
+
+.apply_dimension_full {
+  @apply _apply_container_width _apply_max_height;
+}
+
+._apply_dimension_common {
+  @apply _apply_container_width apply_height;
+}
+
+._apply_dimensions {
+  @apply w-full apply_height;
+}
+
+/* ========================================
+   Transitions
+======================================== */
+.apply_transition_500 {
+  @apply transition-transform duration-500 ease-in-out;
+}
+
+.apply_common_transition {
+  @apply transition-transform duration-300 ease-in-out;
+}
+
+.apply_common_transition-with-hover {
+  @apply apply_common_transition _apply_common-hover;
+}
+
+.apply_transition_all_500 {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+.apply_transition_all_700 {
+  @apply transition-all duration-700 ease-in-out;
+}
+
+/* ========================================
+   Hover Effects
+======================================== */
+._apply_common-hover {
+  @apply hover:scale-110;
+}
+
+.apply_hover_border {
+  @apply border-[3px] border-transparent;
+}
+
+.apply_hover_border_mounted {
+  @apply hover:border-highlight-hover;
+}
+
+.apply_border_mounted {
+  @apply border-highlight-hover;
+}
+
+/* ========================================
+   Positioning
+======================================== */
+._apply_left_element {
+  @apply absolute top-1/2 transform -translate-y-1/2;
+}
+
+._apply_center_element {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+._apply_top_header {
+  @apply top-[4rem];
+}
+
+._apply_top_fixed_after_nav {
+  @apply top-[calc(4rem+2px)];
+}
+
+._apply_left_padding {
+  @apply left-8;
+}
+
+._apply_right_padding {
+  @apply right-8;
+}
+
+._apply_fixed_home_btn {
+  @apply !absolute _apply_top_fixed_after_nav _apply_left_padding;
+}
+
+/* ========================================
+   Buttons
+======================================== */
+._apply_button {
+  @apply px-4 py-2 border-none rounded transition duration-300 ease-in-out;
+}
+
+._apply_active-button {
+  @apply !bg-blue-500 hover:!bg-blue-700 !text-white;
+}
+
+._apply_disabled-button {
+  @apply !bg-gray-300 !text-gray-700;
+}
+
+._apply_common_button {
+  @apply bg-highlight hover:bg-highlight-hover z-plus_1 transition-transform !duration-150 !ease-in-out shadow-none cursor-pointer relative font-fredoka hover:shadow-lg hover:scale-105 border-b-4 border-highlight-theme tracking-wide font-medium text-white;
+}
+
+._apply_button_border_left {
+  @apply hover:!border-l-4;
+}
+
+._apply_button_border_right {
+  @apply hover:!border-r-4;
+}
+
+._apply_button_border_bottom {
+  @apply hover:!border-b-[5.5px];
+}
+
+/* ========================================
+   Custom Buttons
+======================================== */
+._apply_pineapple-button {
+  @apply flex flex-col justify-start gap-0 min-h-fit !bg-transparent !cursor-pointer apply_common_transition-with-hover;
+}
+
+._apply_tanuki-default {
+  @apply justify-start !cursor-pointer apply_common_transition-with-hover !bg-highlight px-4 py-4 flex flex-row gap-2 !text-white shadow-soft-green font-fredoka;
+}
+
+._apply_tanuki-green {
+  @apply min-h-[48px] _apply_tanuki-default !text-lg;
+}
+
+._apply_tanuki-white {
+  @apply min-h-[48px] justify-start !cursor-pointer apply_common_transition-with-hover glass-default px-4 py-4 flex flex-row gap-2 !text-white shadow-soft-green font-fredoka !text-lg;
+}
+
+/* ========================================
+   Links & Authentication
+======================================== */
+._apply_auth_next_link {
+  @apply !bg-transparent text-foreground hover:underline;
+}
+
+._apply_custom_link {
+  @apply apply_common_transition bg-overlay30 hover:bg-highlight text-white font-bold border-[2px] border-white/30 hover:border-white tracking-wider uppercase py-0 h-9 max-h-9;
+}
+
+._apply_custom_overlay_link {
+  @apply apply_common_transition bg-highlight hover:bg-highlight text-white font-bold border-[2px] border-white/70 hover:border-white tracking-wider uppercase py-0 h-9 max-h-9;
+}
+
+/* ========================================
+   Logo & Images
+======================================== */
+._apply_global_image {
+  @apply w-full h-full object-contain hover:grayscale-[80%] transition-transform duration-200 ease-in-out;
+}
+
+.apply_tanuki_logo_div {
+  @apply grid place-items-center w-48;
+}
+
+/* ========================================
+   Text Styles
+======================================== */
+.apply_uppercase-fredoka-text {
+  @apply tracking-widest font-fredoka uppercase text-white;
+}
+
+/* ========================================
+   Custom Errors
+======================================== */
+._apply_custom_error_msg {
+  @apply max-w-[200px] line-clamp-3;
+}
+
+/* ========================================
+   Optional Layer Utilities (commented out)
+======================================== */
+/*
+@layer utilities {
+  .border-image-green-gradient {
+    border-image-source: linear-gradient(
+      180deg,
+      rgba(1, 107, 75, 0.4) 0%,
+      #016b4b 100%
+    );
+  }
+}
+*/
+
+.apply_custom_tooltip {
+  @apply pointer-events-none absolute text-sm px-2 py-1 rounded font-medium text-white bg-highlight/80 z-plus_10 shadow-md;
+}
