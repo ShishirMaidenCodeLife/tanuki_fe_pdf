@@ -111,7 +111,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           
-      - name: 📦 Install Dependencies
+      - name: 📦 Install Dependencies.
         run: |
           echo "📦 Installing dependencies..."
           if [ -f package-lock.json ]; then
